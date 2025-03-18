@@ -1,3 +1,4 @@
+import { AppBar } from "@/components/app-bar";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -28,7 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppBar />
+          {children}
+        </Providers>
       </body>
     </html>
   );
