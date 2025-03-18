@@ -14,8 +14,12 @@ export function useGetProjects() {
         };
       })
     : [];
+  const notesWithoutProject = notes.data
+    ? notes.data.filter((note) => !note.projectId)
+    : [];
   return {
     projects: projectsWithNotes,
+    notes: notesWithoutProject,
     isLoading: projects.isLoading || notes.isLoading,
     error: projects.error || notes.error
   };
