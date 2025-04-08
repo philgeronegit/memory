@@ -1,25 +1,31 @@
 "use client";
 
+import { useDeleteTag } from "@/application/mutations/use-delete-tag";
 import { useTags } from "@/application/queries/use-tags";
-import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { AddTagDialog } from "./add-tag-dialog";
+import { DeletableTag } from "./deletable-tag";
 
 export function Tags() {
   const { data, isLoading, error } = useTags();
+  const deleteTag = useDeleteTag();
+
+  async function onDelete(id: number) {
+    await deleteTag.mutateAsync(id);
+  }
 
   return (
     <div>
-      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-1">
         Tags
       </h3>
 
       {error && <p>Error: {error.message}</p>}
       {!isLoading && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {data?.map((tag) => (
-            <Badge key={tag.id}>{tag.name}</Badge>
+            <DeletableTag key={tag.id} tag={tag} onDelete={onDelete} />
           ))}
         </div>
       )}
@@ -27,7 +33,7 @@ export function Tags() {
 
       <AddTagDialog>
         <div className="flex justify-end">
-          <Button variant="outline" size="icon" title="Ajouter un tag">
+          <Button size="icon" title="Ajouter un tag">
             <Plus />
           </Button>
         </div>
