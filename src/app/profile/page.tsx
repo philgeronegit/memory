@@ -1,5 +1,6 @@
 "use client";
 
+import { useUpdateDeveloper } from "@/application/mutations/use-update-developer";
 import { useDevelopers } from "@/application/queries/use-developers";
 import { useRoles } from "@/application/queries/use-roles";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,6 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -34,11 +34,11 @@ const formSchema = z.object({
   }),
   email: z
     .string({
-      required_error: "Cette email n'est pas valide."
+      required_error: "Cet email n'est pas valide."
     })
     .email(),
   avatarUrl: z.string(),
-  role: z.string(),
+  role: z.string().nonempty(),
   isAdmin: z.boolean().default(false)
 });
 
@@ -46,7 +46,8 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const developers = useDevelopers();
   const developer = developers?.data?.[0];
-  const roles = useRoles();
+  const { data: roles, isLoading } = useRoles();
+  const updateDeveloper = useUpdateDeveloper();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,33 +55,45 @@ export default function ProfileForm() {
       username: developer?.username ?? "",
       email: developer?.email ?? "",
       avatarUrl: developer?.avatarUrl ?? "",
-      role: developer?.role ?? "",
+      role: String(developer?.idRole) ?? "",
       isAdmin: developer?.isAdmin ?? false
     }
   });
 
   useEffect(() => {
-    if (developer) {
+    if (developer && roles) {
+      console.log("🚀 ~ useEffect ~ developer:", developer, roles);
       form.reset({
-        username: developer.username ?? "",
-        email: developer.email ?? "",
+        username: developer.username,
+        email: developer.email,
         avatarUrl: developer.avatarUrl ?? "",
-        role: developer.role ?? "",
+        role: String(developer.idRole),
         isAdmin: developer.isAdmin ?? false
       });
     }
-  }, [developer, form]);
+  }, [developer, form, roles]);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      )
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    if (!developer) return;
+
+    await updateDeveloper.mutateAsync({
+      id: developer.id,
+      username: data.username,
+      email: data.email,
+      avatar_url: data.avatarUrl,
+      id_role: Number(data.role),
+      is_admin: data.isAdmin
     });
+
+    toast({
+      title: "Profil sauvegardé",
+      description: <p>Le profil a été sauvegardé avec succès.</p>
+    });
+  }
+
+  if (isLoading) {
+    return <div>Chargement...</div>;
   }
 
   return (
@@ -144,11 +157,9 @@ export default function ProfileForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent defaultValue={field.value}>
-                    {roles?.data &&
-                      roles.data.map((role) => (
-                        <SelectItem
-                          key={role.id}
-                          value={role.name.toLowerCase()}>
+                    {roles &&
+                      roles.map((role) => (
+                        <SelectItem key={role.id} value={String(role.id)}>
                           {role.name}
                         </SelectItem>
                       ))}
@@ -176,10 +187,9 @@ export default function ProfileForm() {
             )}
           />
 
-          <Button type="submit">Sauver</Button>
+          <Button type="submit">Sauvegarder</Button>
         </form>
       </Form>
-      <Toaster />
     </div>
   );
 }
