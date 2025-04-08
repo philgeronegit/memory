@@ -1,5 +1,5 @@
 import { apiClient } from "../client";
-import { TaskDto } from "./dto";
+import { TaskDto, UpdateTaskInput } from "./dto";
 
 async function getTask(id: number) {
   const response = await apiClient.get<TaskDto>(`/task/${id}`);
@@ -11,6 +11,11 @@ async function getTasks() {
   return response.data;
 }
 
-const api = { getTask, getTasks };
+async function updateTask(input: UpdateTaskInput) {
+  const response = await apiClient.put<TaskDto>(`/task/${input.id}`, input);
+  return response.data;
+}
+
+const api = { getTask, getTasks, updateTask };
 
 export default api;
