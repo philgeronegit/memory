@@ -1,10 +1,18 @@
 import { apiClient } from "../client";
-import { CreateNoteInput, NoteDto } from "./dto";
+import { CreateNoteInput, NoteDto, UpdateNoteInput } from "./dto";
 
 async function createNote(input: CreateNoteInput) {
   const response = await apiClient.post<NoteDto>("/note", input);
-  console.log("create note api", response);
   return response.data;
+}
+
+async function updateNote(input: UpdateNoteInput) {
+  const response = await apiClient.put<NoteDto>(`/note/${input.id}`, input);
+  return response.data;
+}
+
+async function deleteNote(id: number) {
+  await apiClient.delete(`/note/${id}`);
 }
 
 async function getNote(id?: number) {
@@ -17,6 +25,6 @@ async function getNotes() {
   return response.data;
 }
 
-const api = { createNote, getNote, getNotes };
+const api = { createNote, deleteNote, getNote, getNotes, updateNote };
 
 export default api;
