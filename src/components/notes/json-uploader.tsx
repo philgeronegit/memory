@@ -1,4 +1,5 @@
 import { DragEvent, useCallback, useState } from "react";
+import { Input } from "../ui/input";
 
 export default function JsonUploader() {
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export default function JsonUploader() {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}>
-      <input
+      <Input
         type="file"
         accept="application/json"
         onChange={handleInputChange}

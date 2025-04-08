@@ -1,18 +1,14 @@
 import { cn } from "@/lib/utils";
 import { File, FolderClosed, FolderOpen, Pencil, Trash } from "lucide-react";
 import { NodeRendererProps } from "react-arborist";
+import { NoteItem } from "./note";
 
 export const Node = ({
   node,
   style,
   dragHandle,
   tree
-}: NodeRendererProps<{
-  id: string;
-  name: string;
-  isNote: boolean;
-  children: { id: string; name: string }[];
-}>) => {
+}: NodeRendererProps<NoteItem>) => {
   return (
     <div
       style={style}
