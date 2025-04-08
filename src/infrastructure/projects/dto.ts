@@ -5,5 +5,5 @@ export interface ProjectDto {
   created_at: string;
   updated_at: string | null;
   archived_at: string | null;
-  id_developer: number;
+  id_user: number;
 }
