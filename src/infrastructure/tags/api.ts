@@ -1,8 +1,21 @@
 import { apiClient } from "../client";
-import { CreateTagInput, TagDto } from "./dto";
+import { TagDto } from "./dto";
+import {
+  CreateNoteTagInput,
+  CreateTagInput,
+  DeleteNoteTagInput
+} from "./service";
 
 async function createTag(input: CreateTagInput) {
   const response = await apiClient.post<TagDto>("/tag", input);
+  return response.data;
+}
+
+async function createNoteTag(input: CreateNoteTagInput) {
+  const response = await apiClient.post<TagDto>(
+    `/note/${input.idNote}/tag/${input.idTag}`,
+    input
+  );
   return response.data;
 }
 
@@ -11,8 +24,25 @@ async function updateTag(id: number, input: CreateTagInput) {
   return response.data;
 }
 
+async function deleteTag(id: number) {
+  await apiClient.delete(`/tag/${id}`);
+}
+
+async function deleteNoteTag(input: DeleteNoteTagInput) {
+  await apiClient.delete(`/note/${input.idNote}/tag/${input.idTag}`);
+}
+
 async function getTag(id: number) {
   const response = await apiClient.get<TagDto>(`/tag/${id}`);
+  return response.data;
+}
+
+async function getNoteTags(noteId?: number) {
+  if (!noteId) {
+    return Promise.resolve([]);
+  }
+
+  const response = await apiClient.get<TagDto[]>(`/note/${noteId}/tag`);
   return response.data;
 }
 
@@ -21,6 +51,15 @@ async function getTags() {
   return response.data;
 }
 
-const api = { createTag, getTag, getTags, updateTag };
+const api = {
+  createNoteTag,
+  createTag,
+  getNoteTags,
+  deleteTag,
+  deleteNoteTag,
+  getTag,
+  getTags,
+  updateTag
+};
 
 export default api;
