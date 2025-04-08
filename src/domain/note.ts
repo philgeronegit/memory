@@ -8,8 +8,6 @@ export interface Note {
   updatedAt?: string;
   archivedAt?: string;
   projectId?: number;
-  // id_programming_language: number;
-  // id_developer: number;
 }
 
 export function getNoteById(notes?: Note[], noteId?: number) {

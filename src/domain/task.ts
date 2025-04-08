@@ -1,7 +1,15 @@
 export interface Task {
   id: number;
-  name: string;
-  isDone: boolean;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt: string;
+  status: string;
+  dueAt: string;
+  doneAt: string;
   priority: string;
-  dueDate: string;
+  idProject: number;
+  idExecutive: number;
+  idDeveloper: number;
 }

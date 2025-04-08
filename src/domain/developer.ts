@@ -5,5 +5,6 @@ export interface Developer {
   avatarUrl: string;
   createdAt: string;
   isAdmin: boolean;
+  idRole: number;
   role: string;
 }
