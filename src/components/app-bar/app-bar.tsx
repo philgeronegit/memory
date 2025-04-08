@@ -1,5 +1,6 @@
 "use client";
 
+import { useDevelopers } from "@/application/queries/use-developers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Menubar,
@@ -8,7 +9,6 @@ import {
   MenubarMenu,
   MenubarTrigger
 } from "@/components/ui/menubar";
-import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,9 +37,16 @@ const CustomLink = ({ label, pathname, path = "/" }: CustomLinkProps) => (
 export const AppBar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { data } = useDevelopers();
+  const user = data?.[0];
+  const avatarUrl = user?.avatarUrl;
+  const username = user?.username;
+  const initials = username
+    ?.split(" ")
+    .map((n) => n[0])
+    .join("");
 
   const handleMenuItemClick = (itemName: string) => {
-    console.log(`${itemName} clicked!`);
     if (itemName === "login") {
       setOpen(true);
     }
@@ -49,27 +56,40 @@ export const AppBar = () => {
   };
 
   return (
-    <header className="flex h-16 w-full items-center justify-between bg-background px-4 md:px-6">
+    <header className="flex h-16 w-full items-center justify-between border border-slate-300 bg-background px-4 md:px-6">
       <Image src={Logo} alt="Memory" width={64} height={64} />
 
       <div className="flex items-center gap-4">
         <CustomLink pathname={pathname} path={"/"} label="Home" />
         <CustomLink pathname={pathname} path={"/dashboard"} label="Dashboard" />
         <CustomLink pathname={pathname} path={"/profile"} label="Profile" />
-        <CustomLink pathname={pathname} path={"/users"} label="Utilisateurs" />
+        <CustomLink pathname={pathname} path={"/kanban"} label="Kanban" />
+        {user?.isAdmin ? (
+          <CustomLink
+            pathname={pathname}
+            path={"/users"}
+            label="Utilisateurs"
+          />
+        ) : null}
       </div>
 
       <div className="flex gap-2">
-        <Avatar>
-          <AvatarImage src="https://github.com/philgerone.png" />
-          <AvatarFallback>PG</AvatarFallback>
-        </Avatar>
-        <Menubar>
+        <Menubar className="border-0 shadow-none">
           <MenubarMenu>
             <MenubarTrigger>
-              <Menu />
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={avatarUrl} />
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
             </MenubarTrigger>
             <MenubarContent>
+              <div className="flex items-center justify-between p-2">
+                {username}
+                <Avatar>
+                  <AvatarImage src={avatarUrl} />
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
+              </div>
               <MenubarItem onClick={() => handleMenuItemClick("login")}>
                 Login
               </MenubarItem>
