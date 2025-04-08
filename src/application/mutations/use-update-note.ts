@@ -1,12 +1,13 @@
 import NotesService from "@/infrastructure/notes";
-import { CreateNoteInput } from "@/infrastructure/notes/dto";
+import { UpdateNoteInput } from "@/infrastructure/notes/dto";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useCreateNote() {
+export function useUpdateNote() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateNoteInput) => NotesService.createNote(input),
+    mutationFn: (input: UpdateNoteInput) => NotesService.updateNote(input),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["note"] });
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     }
   });

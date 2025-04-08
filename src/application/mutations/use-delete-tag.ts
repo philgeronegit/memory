@@ -1,11 +1,10 @@
 import TagService from "@/infrastructure/tags";
-import { CreateTagInput } from "@/infrastructure/tags/service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useCreateTag() {
+export function useDeleteTag() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateTagInput) => TagService.createTag(input),
+    mutationFn: (id: number) => TagService.deleteTag(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
     }
