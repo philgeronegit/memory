@@ -9,6 +9,20 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+} from "@/components/ui/chart";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis
+} from "recharts";
 
 interface CardsViewProps<T> {
   data: T[];
@@ -35,6 +49,28 @@ const CardsView = <T,>({
     <div className="flex gap-2">{children}</div>
   </div>
 );
+
+const chartData = [
+  { month: "Novembre", desktop: 7, mobile: 8 },
+  { month: "Décembre", desktop: 8, mobile: 8 },
+  { month: "Janvier", desktop: 6, mobile: 8 },
+  { month: "Février", desktop: 5, mobile: 2 },
+  { month: "Mars", desktop: 7, mobile: 12 }
+];
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--chart-1))"
+  },
+  mobile: {
+    label: "Mobile",
+    color: "hsl(var(--chart-2))"
+  },
+  label: {
+    color: "hsl(var(--background))"
+  }
+} satisfies ChartConfig;
 
 export default function Dashboard() {
   const notes = useNotes();
@@ -69,15 +105,15 @@ export default function Dashboard() {
           tasks.data.map((task) => (
             <Card key={task.id}>
               <CardHeader>
-                <CardTitle>{task.name}</CardTitle>
-                <CardDescription>{task.dueDate}</CardDescription>
+                <CardTitle>{task.title}</CardTitle>
+                <CardDescription>{task.description}</CardDescription>
               </CardHeader>
             </Card>
           ))}
       </div>
       <div className="flex gap-2"></div>
       <h2>Mes projets</h2>
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-2">
         {projects?.data &&
           projects.data.map((project) => (
             <Card key={project.id}>
@@ -88,6 +124,51 @@ export default function Dashboard() {
             </Card>
           ))}
       </div>
+
+      <h2>Notes des derniers mois</h2>
+      <ChartContainer config={chartConfig} className="h-[200px]">
+        <BarChart
+          accessibilityLayer
+          data={chartData}
+          layout="vertical"
+          margin={{ right: 16 }}>
+          <CartesianGrid horizontal={false} />
+          <YAxis
+            dataKey="month"
+            type="category"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={(value) => value.slice(0, 3)}
+            hide
+          />
+          <XAxis dataKey="desktop" type="number" hide />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="line" />}
+          />
+          <Bar
+            dataKey="desktop"
+            layout="vertical"
+            fill="var(--color-desktop)"
+            radius={4}>
+            <LabelList
+              dataKey="month"
+              position="insideLeft"
+              offset={8}
+              className="fill-[--color-label]"
+              fontSize={12}
+            />
+            <LabelList
+              dataKey="desktop"
+              position="right"
+              offset={8}
+              className="fill-foreground"
+              fontSize={12}
+            />
+          </Bar>
+        </BarChart>
+      </ChartContainer>
     </div>
   );
 }
