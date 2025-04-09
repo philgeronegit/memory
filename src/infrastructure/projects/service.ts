@@ -7,12 +7,12 @@ export class ProjectsService {
   }
 
   async getProject(id: number) {
-    const note = await this.api.getProject(id);
-    return dtoToProject(note);
+    const project = await this.api.getProject(id);
+    return dtoToProject(project);
   }
 
   async getProjects() {
-    const notes = await this.api.getProjects();
-    return notes.map(dtoToProject);
+    const projects = await this.api.getProjects();
+    return projects.map(dtoToProject);
   }
 }

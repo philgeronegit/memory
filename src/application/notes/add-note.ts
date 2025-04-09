@@ -12,7 +12,7 @@ interface AddNoteInput {
   is_public: boolean;
   id_programming_language: number;
   id_project?: number;
-  id_developer: number;
+  id_user: number;
 }
 
 interface Dependencies {
@@ -20,7 +20,15 @@ interface Dependencies {
 }
 
 async function addNote(
-  { title, content }: AddNoteInput,
+  {
+    title,
+    content,
+    type,
+    is_public,
+    id_programming_language,
+    id_project,
+    id_user
+  }: AddNoteInput,
   { createNote }: Dependencies
 ) {
   try {
@@ -31,7 +39,7 @@ async function addNote(
       is_public,
       id_programming_language,
       id_project,
-      id_developer
+      id_user
     });
 
     return { error: undefined };

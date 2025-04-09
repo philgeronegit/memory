@@ -9,7 +9,7 @@ export interface NoteDto {
   archived_at?: string;
   id_programming_language: number;
   id_project?: number;
-  id_developer: number;
+  id_user: number;
 }
 
 export interface CreateNoteInput {
@@ -19,5 +19,11 @@ export interface CreateNoteInput {
   is_public: boolean;
   id_programming_language: number;
   id_project?: number;
-  id_developer: number;
+  id_user: number;
+}
+export interface UpdateNoteInput {
+  id: number;
+  title?: string;
+  content?: string;
+  is_public?: boolean;
 }

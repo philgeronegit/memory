@@ -6,3 +6,14 @@ export interface CommentDto {
   username: string;
   email: string;
 }
+
+export interface CreateCommentInput {
+  id_user: number;
+  id_item: number;
+  content: string;
+}
+
+export interface UpdateCommentInput {
+  id: number;
+  content: string;
+}

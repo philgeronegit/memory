@@ -1,3 +1,5 @@
+import { AppBar } from "@/components/app-bar";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -27,8 +29,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`}>
+        <Providers>
+          <AppBar />
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
