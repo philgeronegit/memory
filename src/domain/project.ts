@@ -7,5 +7,5 @@ export interface Project {
   createdAt: string;
   updatedAt: string | null;
   archivedAt: string | null;
-  notes: Note[] | null;
+  notes?: Note[] | null;
 }
