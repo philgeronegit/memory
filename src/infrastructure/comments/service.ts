@@ -1,5 +1,9 @@
-import { CreateCommentInput, UpdateCommentInput } from "./dto";
-import { CommentsApi } from "./interfaces";
+import {
+  CommentsApi,
+  CreateCommentInput,
+  UpdateCommentInput,
+  UpdateCommentScoreInput
+} from "./interfaces";
 import { dtoToComment } from "./transform";
 
 export class CommentsService {
@@ -12,8 +16,17 @@ export class CommentsService {
     return dtoToComment(comment);
   }
 
+  async deleteComment(id: number) {
+    await this.api.deleteComment(id);
+  }
+
   async updateComment(input: UpdateCommentInput) {
     const comment = await this.api.updateComment(input);
+    return dtoToComment(comment);
+  }
+
+  async updateCommentScore(input: UpdateCommentScoreInput) {
+    const comment = await this.api.updateCommentScore(input);
     return dtoToComment(comment);
   }
 

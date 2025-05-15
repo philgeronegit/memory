@@ -2,10 +2,9 @@
 
 import { useCreateComment } from "@/application/mutations/use-create-comment";
 import { useComments } from "@/application/queries/use-comments";
-import { useDevelopers } from "@/application/queries/use-developers";
 import { useToast } from "@/hooks/use-toast";
 import useNotesStore from "@/store/useNotesStore";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
@@ -18,12 +17,16 @@ export default function Comments() {
     error,
     isLoading
   } = useComments({ noteId: selectedNoteId });
-  const { data } = useDevelopers();
-  const user = data?.[0];
+  const { roleUser } = useNotesStore();
   const createComment = useCreateComment();
   const [isDisabled, setDisabled] = useState(false);
   const [comment, setComment] = useState("");
   const { toast } = useToast();
+  const commentsEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [comments]);
 
   if (isLoading) {
     return <p>Chargement...</p>;
@@ -33,7 +36,7 @@ export default function Comments() {
   }
 
   const handleAddComment = async () => {
-    if (!user) {
+    if (!roleUser) {
       return;
     }
     if (!selectedNoteId) {
@@ -43,7 +46,7 @@ export default function Comments() {
     try {
       setDisabled(true);
       await createComment.mutateAsync({
-        id_user: user.id,
+        id_user: roleUser.id,
         id_item: selectedNoteId,
         content: comment
       });
@@ -67,9 +70,15 @@ export default function Comments() {
     setComment(event.target.value);
   };
 
+  if (!comments) {
+    return <p>Pas de note sélectionnée</p>;
+  }
+
   return (
-    <div className="p-2">
-      <div className="my-2 flex flex-col gap-2">
+    <div
+      id="comments-container"
+      className="flex flex-col h-full overflow-hidden p-2">
+      <div className="flex-1 flex flex-col overflow-y-auto gap-2">
         {comments &&
           comments.map((comment) => (
             <div key={comment.id} className="">
@@ -77,6 +86,7 @@ export default function Comments() {
               <Separator className="my-1" />
             </div>
           ))}
+        <div ref={commentsEndRef} />
       </div>
       <div className="flex flex-col gap-2">
         <Input value={comment} onChange={handleCommentCHange} />

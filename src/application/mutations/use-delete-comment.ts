@@ -1,12 +1,10 @@
 import CommentService from "@/infrastructure/comments";
-import { CreateCommentInput } from "@/infrastructure/comments/interfaces";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useCreateComment() {
+export function useDeleteComment() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateCommentInput) =>
-      CommentService.createComment(input),
+    mutationFn: (id: number) => CommentService.deleteComment(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
     }
