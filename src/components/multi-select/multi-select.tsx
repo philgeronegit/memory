@@ -72,12 +72,6 @@ interface MultiSelectProps
    */
   onValueChange: (value: string[]) => void;
 
-  /**
-   * Callback function triggered when a value is selected.
-   * Receives a string of the value selected.
-   */
-  onValueAdd: (value: string[]) => void;
-
   /** The default selected values when the component mounts. */
   defaultValue?: string[];
 

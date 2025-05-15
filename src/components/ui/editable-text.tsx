@@ -5,9 +5,10 @@ import React, { useState } from "react";
 interface EditableTextProps {
   text: string;
   onChange: (text: string) => void;
+  onSave: () => void;
 }
 
-export function EditableText({ text, onChange }: EditableTextProps) {
+export function EditableText({ text, onChange, onSave }: EditableTextProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditClick = () => {
@@ -17,6 +18,7 @@ export function EditableText({ text, onChange }: EditableTextProps) {
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setIsEditing(false);
+      onSave();
     }
   };
 
