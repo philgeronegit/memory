@@ -1,5 +1,6 @@
 export interface TechnicalSkillDto {
   id_technical_skill: number;
   name: string;
-  year_experience: string;
+  user_id: number;
+  year_experience: number;
 }

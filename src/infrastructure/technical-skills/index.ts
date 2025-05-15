@@ -1,6 +1,6 @@
 import tagsApi from "./api";
 import { TechnicalSkillsService } from "./service";
 
-const tagsService = new TechnicalSkillsService(tagsApi);
+const technicalSkillsService = new TechnicalSkillsService(tagsApi);
 
-export default tagsService;
+export default technicalSkillsService;

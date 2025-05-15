@@ -6,13 +6,18 @@ export class TechnicalSkillsService {
     this.api = api;
   }
 
-  async getTechnicalSkill(id: number) {
+  async getTechnicalSkill(id?: number) {
     const technicalSkill = await this.api.getTechnicalSkill(id);
     return dtoToTechnicalSkill(technicalSkill);
   }
 
   async getTechnicalSkills() {
     const technicalSkills = await this.api.getTechnicalSkills();
+    return technicalSkills.map(dtoToTechnicalSkill);
+  }
+
+  async getUserTechnicalSkills(userId?: number) {
+    const technicalSkills = await this.api.getUserTechnicalSkills(userId);
     return technicalSkills.map(dtoToTechnicalSkill);
   }
 }
