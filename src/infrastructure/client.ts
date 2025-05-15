@@ -1,6 +1,11 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
-const BASE_URL = "http://localhost/memory";
+// Load environment variables
+dotenv.config();
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost/memory";
+console.log("🚀 ~ BASE_URL:", BASE_URL, process.env);
 
 axios.interceptors.response.use(
   (response) => response,
