@@ -1,4 +1,4 @@
-import { Tag } from "@/domain";
+import { Tag } from "@/domain/tag";
 import { TagDto } from "./dto";
 
 export function dtoToTag(dto: TagDto): Tag {

@@ -1,4 +1,4 @@
-import { Note } from "@/domain";
+import { Note } from "@/domain/note";
 import { NoteDto } from "./dto";
 
 export function dtoToNote(dto: NoteDto): Note {
@@ -11,6 +11,11 @@ export function dtoToNote(dto: NoteDto): Note {
     createdAt: dto.created_at,
     updatedAt: dto.updated_at,
     archivedAt: dto.archived_at,
-    projectId: dto.id_project
+    projectId: dto.id_project,
+    username: dto.username,
+    email: dto.email,
+    totalLikes: dto.total_likes,
+    totalDislikes: dto.total_dislikes,
+    score: dto.score
   };
 }

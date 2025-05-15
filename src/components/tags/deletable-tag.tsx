@@ -1,4 +1,4 @@
-import { Tag } from "@/domain";
+import { Tag } from "@/domain/tag";
 import { Badge } from "../ui/badge";
 
 interface TagProps {

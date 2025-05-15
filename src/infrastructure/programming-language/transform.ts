@@ -1,4 +1,4 @@
-import { ProgrammingLanguage } from "@/domain";
+import { ProgrammingLanguage } from "@/domain/programming-language";
 import { ProgrammingLanguageDto } from "./dto";
 
 export function dtoToProgrammingLanguage(

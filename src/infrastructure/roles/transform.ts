@@ -1,4 +1,4 @@
-import { Role } from "@/domain";
+import { Role } from "@/domain/role";
 import { RoleDto } from "./dto";
 
 export function dtoToRole(dto: RoleDto): Role {

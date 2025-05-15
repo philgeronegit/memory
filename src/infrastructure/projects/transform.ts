@@ -1,4 +1,4 @@
-import { Project } from "@/domain";
+import { Project } from "@/domain/project";
 import { ProjectDto } from "./dto";
 
 export function dtoToProject(dto: ProjectDto): Project {

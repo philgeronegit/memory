@@ -1,4 +1,4 @@
-import { Developer } from "@/domain";
+import { Developer } from "@/domain/developer";
 import { DeveloperDto } from "./dto";
 
 export function dtoToDeveloper(dto: DeveloperDto): Developer {
@@ -10,6 +10,7 @@ export function dtoToDeveloper(dto: DeveloperDto): Developer {
     createdAt: dto.created_at,
     isAdmin: dto.is_admin,
     idRole: dto.id_role,
-    role: dto.role
+    roleName: dto.role_name,
+    roleValue: dto.role_value
   };
 }

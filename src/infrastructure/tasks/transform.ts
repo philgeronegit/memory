@@ -1,4 +1,4 @@
-import { Task } from "@/domain";
+import { Task } from "@/domain/task";
 import { TaskDto } from "./dto";
 
 export function dtoToTask(dto: TaskDto): Task {
