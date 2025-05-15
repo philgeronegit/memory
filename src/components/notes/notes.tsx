@@ -4,10 +4,11 @@ import { useGetProjects } from "@/application/get-projects";
 import { useDeleteNote } from "@/application/mutations/use-delete-note";
 import { useUpdateNote } from "@/application/mutations/use-update-note";
 import { useNote } from "@/application/queries/use-note";
+import { NoteItem } from "@/components/notes/note-item";
+import { Note } from "@/domain/note";
 import useNotesStore from "@/store/useNotesStore";
-import { FilePlus, FolderPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { NodeApi, Tree } from "react-arborist";
+import { NodeApi, Tree, TreeApi } from "react-arborist";
 import { useMeasure } from "react-use";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -22,7 +23,7 @@ export function Notes() {
     noteId: selectedNoteId
   });
   const [term, setTerm] = useState("");
-  const treeRef = useRef(null);
+  const treeRef = useRef<TreeApi<NoteItem> | null>(null);
   const updateNote = useUpdateNote();
   const deleteNote = useDeleteNote();
   const [ref, { width, height }] = useMeasure();
@@ -50,7 +51,8 @@ export function Notes() {
       return {
         id: String(project.id),
         name: project.name,
-        children: project.notes?.map((note) => {
+        isNote: false, // Add isNote property for projects
+        children: project.notes?.map((note: Note) => {
           return {
             id: String(note.id),
             name: note.title,
@@ -93,7 +95,16 @@ export function Notes() {
 
     await deleteNote.mutateAsync(Number(ids[0]));
   };
-  const onCreate = async ({ parentId, index, type }) => {
+
+  const onCreate = async ({
+    parentId,
+    index,
+    type
+  }: {
+    parentId: string | null;
+    index: number;
+    type: string;
+  }) => {
     console.log(
       "🚀 ~ onCreate ~ parentId, index, type:",
       parentId,
@@ -107,32 +118,33 @@ export function Notes() {
     };
     return newNode;
   };
+
   const onMove = ({
     dragIds,
     parentId,
     index
   }: {
     dragIds: string[];
-    parentId: number;
+    parentId: string | null;
     index: number;
   }) => {
     console.log("onMove", dragIds, parentId, index);
   };
 
-  const createFileFolder = (
-    <>
-      <button
-        onClick={() => treeRef.current?.createInternal(treeRef.current.root.id)}
-        title="Nouveau projet">
-        <FolderPlus />
-      </button>
-      <button
-        onClick={() => treeRef.current?.createLeaf(treeRef.current.root.id)}
-        title="Nouvelle note">
-        <FilePlus />
-      </button>
-    </>
-  );
+  // const createFileFolder = (
+  //   <>
+  //     <button
+  //       onClick={() => treeRef.current?.createInternal(treeRef.current.root.id)}
+  //       title="Nouveau projet">
+  //       <FolderPlus />
+  //     </button>
+  //     <button
+  //       onClick={() => treeRef.current?.createLeaf(treeRef.current.root.id)}
+  //       title="Nouvelle note">
+  //       <FilePlus />
+  //     </button>
+  //   </>
+  // );
 
   if (isLoading) {
     return (
@@ -150,8 +162,10 @@ export function Notes() {
   }
 
   return (
-    <div className="h-full">
-      <div className="flex flex-col gap-1 h-full" ref={ref}>
+    <div className="">
+      <div
+        className="flex flex-col gap-1"
+        ref={ref as unknown as React.RefObject<HTMLDivElement>}>
         <Input
           type="text"
           placeholder="Recherche..."
@@ -159,8 +173,8 @@ export function Notes() {
           value={term}
           onChange={(e) => setTerm(e.target.value)}
         />
-        <div className="">{createFileFolder}</div>
-        <div className="h-ful">
+        {/* <div className="">{createFileFolder}</div> */}
+        <div id="tree-container" className="h-[75vh]">
           <Tree
             ref={treeRef}
             data={data}

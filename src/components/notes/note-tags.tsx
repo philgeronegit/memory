@@ -1,12 +1,13 @@
-import { useCreateNoteTag } from "@/application/mutations/use-create-note-tag";
-import { useDeleteNoteTag } from "@/application/mutations/use-delete-note-tag";
+import { useUpdateNoteTag } from "@/application/mutations/use-update-note-tag";
 import { useNoteTags } from "@/application/queries/use-note-tags";
 import { useTags } from "@/application/queries/use-tags";
+import { useToast } from "@/hooks/use-toast";
 import useNotesStore from "@/store/useNotesStore";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "../multi-select/multi-select";
 
 export function NoteTags() {
+  const { toast } = useToast();
   const { selectedNoteId } = useNotesStore();
   const {
     data: noteTags,
@@ -14,10 +15,8 @@ export function NoteTags() {
     error: errorTags
   } = useNoteTags({ noteId: selectedNoteId });
   const { data: tags } = useTags();
-  const createNoteTag = useCreateNoteTag();
-  const deleteNoteTag = useDeleteNoteTag();
+  const updateNoteTag = useUpdateNoteTag();
   const [selectedTags, setSelectedTags] = useState<string[]>();
-  console.log("🚀 ~ NoteTags ~ tags:", tags);
   const tagsList =
     tags?.map((tag) => ({
       value: String(tag.id),
@@ -32,23 +31,38 @@ export function NoteTags() {
     setSelectedTags(selectedTags);
   }, [noteTags, selectedNoteId]);
 
-  const onValueChange = (tags: string[]) => {
-    if (!selectedTags) {
+  const onValueChange = async (tags: string[]) => {
+    console.log("🚀 ~ onValueChange ~ tags:", tags);
+
+    if (!selectedNoteId) {
       return;
     }
 
-    if (tags.length > selectedTags.length) {
-      // find tag in tags that is not in selectedTags
-      const newTag = tags.find((tag) => !selectedTags.includes(tag));
-      if (newTag) {
-        console.log("new tag", newTag);
-      }
-    } else {
-      const deletedTag = selectedTags.find((tag) => !tags.includes(tag));
-      if (deletedTag) {
-        console.log("deleted tag", deletedTag);
-      }
-    }
+    await updateNoteTag.mutateAsync({
+      idNote: selectedNoteId,
+      tagIds: tags.map((tag) => Number(tag))
+    });
+    toast({
+      title: "Tags mis à jour",
+      description: <p>Les tags ont été mis à jour.</p>
+    });
+
+    // if (!selectedTags) {
+    //   return;
+    // }
+
+    // if (tags.length > selectedTags.length) {
+    //   // find tag in tags that is not in selectedTags
+    //   const newTag = tags.find((tag) => !selectedTags.includes(tag));
+    //   if (newTag) {
+    //     console.log("new tag", newTag);
+    //   }
+    // } else {
+    //   const deletedTag = selectedTags.find((tag) => !tags.includes(tag));
+    //   if (deletedTag) {
+    //     console.log("deleted tag", deletedTag);
+    //   }
+    // }
     setSelectedTags(tags);
   };
 

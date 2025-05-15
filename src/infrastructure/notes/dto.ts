@@ -10,6 +10,11 @@ export interface NoteDto {
   id_programming_language: number;
   id_project?: number;
   id_user: number;
+  username: string;
+  email: string;
+  total_likes?: number;
+  total_dislikes?: number;
+  score?: number;
 }
 
 export interface CreateNoteInput {
@@ -26,4 +31,9 @@ export interface UpdateNoteInput {
   title?: string;
   content?: string;
   is_public?: boolean;
+}
+export interface UpdateNoteScoreInput {
+  id: number;
+  user_id: number;
+  score: number;
 }

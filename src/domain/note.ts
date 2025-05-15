@@ -8,6 +8,11 @@ export interface Note {
   updatedAt?: string;
   archivedAt?: string;
   projectId?: number;
+  username: string;
+  email: string;
+  totalLikes?: number;
+  totalDislikes?: number;
+  score?: number;
 }
 
 export function getNoteById(notes?: Note[], noteId?: number) {

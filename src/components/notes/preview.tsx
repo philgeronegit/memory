@@ -9,6 +9,10 @@ import remarkGfm from "remark-gfm";
 export function Preview() {
   const { noteContent } = useNotesStore();
 
+  if (!noteContent) {
+    return <p>Pas de note sélectionnée</p>;
+  }
+
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}

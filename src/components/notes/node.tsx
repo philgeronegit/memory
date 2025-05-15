@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { File, FolderClosed, FolderOpen, Pencil, Trash } from "lucide-react";
 import { NodeRendererProps } from "react-arborist";
-import { NoteItem } from "./note";
+import { NoteItem } from "./note-item";
 
 export const Node = ({
   node,

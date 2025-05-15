@@ -1,4 +1,4 @@
-import { CreateNoteInput, UpdateNoteInput } from "./dto";
+import { CreateNoteInput, UpdateNoteInput, UpdateNoteScoreInput } from "./dto";
 import { NotesApi } from "./interfaces";
 import { dtoToNote } from "./transform";
 
@@ -17,6 +17,11 @@ export class NotesService {
     return dtoToNote(note);
   }
 
+  async updateNoteScore(input: UpdateNoteScoreInput) {
+    const note = await this.api.updateNoteScore(input);
+    return dtoToNote(note);
+  }
+
   async deleteNote(id: number) {
     await this.api.deleteNote(id);
   }
@@ -27,6 +32,14 @@ export class NotesService {
     }
     const note = await this.api.getNote(id);
     return dtoToNote(note);
+  }
+
+  async getNoteScore(id?: number, userId?: number) {
+    if (!id || !userId) {
+      return null;
+    }
+    const score = await this.api.getNoteScore(id, userId);
+    return score;
   }
 
   async getNotes() {
