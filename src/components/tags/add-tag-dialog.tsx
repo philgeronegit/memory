@@ -36,6 +36,8 @@ export function AddTagDialog({ children }: AddTagDialogProps) {
     const name = event.currentTarget.elements.name.value;
 
     await createTag.mutateAsync({ name });
+
+    setOpen(false);
   }
 
   return (

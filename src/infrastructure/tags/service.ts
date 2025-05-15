@@ -8,6 +8,10 @@ export interface CreateNoteTagInput {
   idNote: number;
   idTag: number;
 }
+export interface UpdateNoteTagInput {
+  idNote: number;
+  tagIds: number[];
+}
 
 export interface DeleteNoteTagInput {
   idNote: number;
@@ -31,6 +35,11 @@ export class TagsService {
 
   async updateTag(id: number, input: CreateTagInput) {
     const tag = await this.api.updateTag(id, input);
+    return dtoToTag(tag);
+  }
+
+  async updateNoteTag(input: UpdateNoteTagInput) {
+    const tag = await this.api.updateNoteTag(input);
     return dtoToTag(tag);
   }
 

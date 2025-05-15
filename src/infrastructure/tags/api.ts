@@ -3,7 +3,8 @@ import { TagDto } from "./dto";
 import {
   CreateNoteTagInput,
   CreateTagInput,
-  DeleteNoteTagInput
+  DeleteNoteTagInput,
+  UpdateNoteTagInput
 } from "./service";
 
 async function createTag(input: CreateTagInput) {
@@ -14,6 +15,16 @@ async function createTag(input: CreateTagInput) {
 async function createNoteTag(input: CreateNoteTagInput) {
   const response = await apiClient.post<TagDto>(
     `/note/${input.idNote}/tag/${input.idTag}`,
+    input
+  );
+  return response.data;
+}
+
+async function updateNoteTag(input: UpdateNoteTagInput) {
+  console.log("🚀 ~ updateNoteTag ~ input:", input);
+  // const ids = input.tagIds.join(",");
+  const response = await apiClient.put<TagDto>(
+    `/note/${input.idNote}/tag`,
     input
   );
   return response.data;
@@ -59,7 +70,8 @@ const api = {
   deleteNoteTag,
   getTag,
   getTags,
-  updateTag
+  updateTag,
+  updateNoteTag
 };
 
 export default api;
