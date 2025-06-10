@@ -7,3 +7,20 @@ export interface ProjectDto {
   archived_at: string | null;
   id_user: number;
 }
+
+export interface CreateProjectInput {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
+
+export interface UpdateProjectInput {
+  id: number;
+  name?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  status?: string;
+}

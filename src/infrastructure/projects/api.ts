@@ -1,5 +1,22 @@
 import { apiClient } from "../client";
-import { ProjectDto } from "./dto";
+import { CreateProjectInput, ProjectDto, UpdateProjectInput } from "./dto";
+
+async function createProject(input: CreateProjectInput) {
+  const response = await apiClient.post<ProjectDto>("/project", input);
+  return response.data;
+}
+
+async function updateProject(input: UpdateProjectInput) {
+  const response = await apiClient.put<ProjectDto>(
+    `/project/${input.id}`,
+    input
+  );
+  return response.data;
+}
+
+async function deleteProject(id: number) {
+  await apiClient.delete(`/project/${id}`);
+}
 
 async function getProject(id: number) {
   const response = await apiClient.get<ProjectDto>(`/project/${id}`);
@@ -11,6 +28,12 @@ async function getProjects() {
   return response.data;
 }
 
-const api = { getProject, getProjects };
+const api = {
+  createProject,
+  updateProject,
+  deleteProject,
+  getProject,
+  getProjects
+};
 
 export default api;
