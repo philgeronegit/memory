@@ -31,6 +31,7 @@ export interface UpdateNoteInput {
   title?: string;
   content?: string;
   is_public?: boolean;
+  id_project?: number;
 }
 export interface UpdateNoteScoreInput {
   id: number;
