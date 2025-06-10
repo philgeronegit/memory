@@ -160,8 +160,7 @@ export function Note() {
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           <EditableText text={title} onChange={onChange} onSave={onNoteSave} />
         </h3>
-        {`Crée le ${note.createdAt} par ${note.username}`}
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 items-center">
           <ToggleGroup
             type="single"
             value={mode}
@@ -182,6 +181,9 @@ export function Note() {
         <Switch checked={note.isPublic} onCheckedChange={onNoteCheckedChange} />
         <Label htmlFor="airplane-mode">Publique</Label>
       </div>
+      <div className="m-1">{`Crée le ${new Date(
+        note.createdAt
+      ).toLocaleDateString()} par ${note.username}`}</div>
       <div className="flex flex-col gap-2 h-full">
         <div className="">
           {mode === "edit" && (
