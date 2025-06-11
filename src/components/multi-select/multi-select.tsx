@@ -72,6 +72,12 @@ interface MultiSelectProps
    */
   onValueChange: (value: string[]) => void;
 
+  /**
+   * Callback function triggered when a new item is created.
+   * Receives the name of the new item as an argument.
+   */
+  onCreateNew: (name: string) => void;
+
   /** The default selected values when the component mounts. */
   defaultValue?: string[];
 
@@ -121,6 +127,7 @@ export const MultiSelect = React.forwardRef<
     {
       options,
       onValueChange,
+      onCreateNew,
       variant,
       defaultValue = [],
       placeholder = "Select options",
@@ -137,6 +144,7 @@ export const MultiSelect = React.forwardRef<
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const [newItemName, setNewItemName] = React.useState("");
 
     React.useEffect(() => {
       setSelectedValues(defaultValue);
@@ -145,13 +153,19 @@ export const MultiSelect = React.forwardRef<
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
+      console.info(event.currentTarget.value);
+      const exists = options.find(
+        (option) =>
+          option.label.toLowerCase() === event.currentTarget.value.toLowerCase()
+      );
+      if (!exists) {
+        setNewItemName(event.currentTarget.value);
+      } else {
+        setNewItemName("");
+      }
+
       if (event.key === "Enter") {
         setIsPopoverOpen(true);
-        const exists = options.find(
-          (option) =>
-            option.label.toLowerCase() ===
-            event.currentTarget.value.toLowerCase()
-        );
         if (!exists) {
           const newSelectedValues = [
             ...selectedValues,
@@ -295,10 +309,17 @@ export const MultiSelect = React.forwardRef<
           <Command>
             <CommandInput
               placeholder="Rechercher..."
-              onKeyDown={handleInputKeyDown}
+              onKeyUp={handleInputKeyDown}
             />
             <CommandList>
-              <CommandEmpty>Pas de résultat.</CommandEmpty>
+              <CommandEmpty>
+                <Button
+                  variant="ghost"
+                  className="w-full text-center"
+                  onClick={() => onCreateNew(newItemName)}>
+                  Créer nouveau {newItemName && `: ${newItemName}`}
+                </Button>
+              </CommandEmpty>
               <CommandGroup>
                 <CommandItem
                   key="all"
