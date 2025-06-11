@@ -98,7 +98,7 @@ export default function ProfileForm() {
   }
 
   return (
-    <div className="flex justify-center p-2 gap-4">
+    <div className="flex flex-col md:flex-row justify-center p-2 gap-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

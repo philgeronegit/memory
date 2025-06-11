@@ -17,8 +17,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useEffectOnce } from "react-use";
-import Logo from "../../assets/logo.png";
+import { useEffectOnce, useMedia } from "react-use";
+import Logo from "../../assets/logo-64.png";
 import { Button } from "../ui/button";
 import { LoginDialog } from "../users";
 
@@ -56,6 +56,7 @@ export const AppBar = () => {
   const { setUser, setRoleUser } = useNotesStore();
   const router = useRouter();
   const { toast } = useToast();
+  const isWide = useMedia("(min-width: 480px)");
 
   useEffectOnce(() => {
     const runAsync = async () => {
@@ -82,7 +83,11 @@ export const AppBar = () => {
   });
 
   const handleMenuItemClick = (itemName: string) => {
-    if (itemName === "logout") {
+    if (itemName === "modify-pasword") {
+      router.push("/profile/change-password");
+    } else if (itemName === "settings") {
+      router.push("/profile/settings");
+    } else if (itemName === "logout") {
       setUser(undefined);
       setRoleUser(undefined);
       router.push("/login");
@@ -91,7 +96,7 @@ export const AppBar = () => {
 
   return (
     <header className="flex h-16 w-full items-center justify-between border border-slate-300 bg-background px-4 md:px-6">
-      <Image src={Logo} alt="Memory" width={64} height={64} />
+      <Image src={Logo} alt="Memory" />
 
       {user && (
         <div className="flex items-center gap-4">
@@ -102,8 +107,10 @@ export const AppBar = () => {
             label="Dashboard"
           />
           <CustomLink pathname={pathname} path={"/profile"} label="Profile" />
-          <CustomLink pathname={pathname} path={"/kanban"} label="Kanban" />
-          {hasPermission(roleUser, "view:users") ? (
+          {isWide && (
+            <CustomLink pathname={pathname} path={"/kanban"} label="Kanban" />
+          )}
+          {isWide && hasPermission(roleUser, "view:users") ? (
             <CustomLink
               pathname={pathname}
               path={"/users"}
@@ -146,6 +153,9 @@ export const AppBar = () => {
                 <MenubarItem
                   onClick={() => handleMenuItemClick("modify-pasword")}>
                   Changer de mot de passe
+                </MenubarItem>
+                <MenubarItem onClick={() => handleMenuItemClick("settings")}>
+                  Options
                 </MenubarItem>
                 <MenubarItem onClick={() => handleMenuItemClick("logout")}>
                   Logout
