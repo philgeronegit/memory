@@ -4,6 +4,7 @@ import { useUpdateNote } from "@/application/mutations/use-update-note";
 import { useUpdateNoteScore } from "@/application/mutations/use-update-note-score";
 import { useNote } from "@/application/queries/use-note";
 import { useNoteScore } from "@/application/queries/use-note-score";
+import { NoteMarkdown } from "@/components/notes/note-markdown";
 import { EditableText } from "@/components/ui/editable-text";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -13,10 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import useNotesStore from "@/store/useNotesStore";
 import { BookOpenText, Pencil, Save, ThumbsDown, ThumbsUp } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
 import { Button } from "../ui/button";
 import { NoteTags } from "./note-tags";
 
@@ -29,7 +26,7 @@ export function Note() {
   const { data: note, isLoading, error } = useNote({ noteId: selectedNoteId });
   const { data: noteScore } = useNoteScore({ noteId: selectedNoteId, userId });
   const score = noteScore?.score ?? 0;
-  console.log("🚀 ~ Note ~ score:", score);
+  // console.log("🚀 ~ Note ~ score:", score);
   const [mode, setMode] = useState("edit");
   const updateNote = useUpdateNote();
   const [title, setTitle] = useState("");
@@ -181,9 +178,21 @@ export function Note() {
         <Switch checked={note.isPublic} onCheckedChange={onNoteCheckedChange} />
         <Label htmlFor="airplane-mode">Publique</Label>
       </div>
-      <div className="m-1">{`Crée le ${new Date(
+      <div className="m-1">{`Créé le ${new Date(
         note.createdAt
       ).toLocaleDateString()} par ${note.username}`}</div>
+      {note.updatedAt && (
+        <div className="m-1">{`Modifié le ${new Date(
+          note.updatedAt
+        ).toLocaleDateString("fr-FR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        })} à ${new Date(note.updatedAt).toLocaleTimeString("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        })}`}</div>
+      )}
       <div className="flex flex-col gap-2 h-full">
         <div className="">
           {mode === "edit" && (
@@ -196,30 +205,7 @@ export function Note() {
               className="h-96"
             />
           )}
-          {mode === "read" && (
-            <Markdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                code(props) {
-                  const { children, className, ...rest } = props;
-                  const match = /language-(\w+)/.exec(className || "");
-                  return match ? (
-                    <SyntaxHighlighter
-                      PreTag="div"
-                      language={match[1]}
-                      style={dark}>
-                      {String(children).replace(/\n$/, "")}
-                    </SyntaxHighlighter>
-                  ) : (
-                    <code {...rest} className={className}>
-                      {children}
-                    </code>
-                  );
-                }
-              }}>
-              {postContent}
-            </Markdown>
-          )}
+          {mode === "read" && <NoteMarkdown noteContent={postContent} />}
         </div>
 
         <div>
