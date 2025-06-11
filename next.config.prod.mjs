@@ -3,9 +3,9 @@ const nextConfig = {
   output: "export",
 
   // Ensures routing works under /memory
-  basePath: "/memory",
+  basePath: "/memory-app",
   // Tells Next.js to generate correct URLs like /memory/_next/static/...
-  assetPrefix: "/memory/",
+  assetPrefix: "/memory-app/",
 
   // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
   trailingSlash: true,
