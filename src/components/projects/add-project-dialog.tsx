@@ -1,3 +1,4 @@
+import { useCreateProject } from "@/application/mutations/use-create-project";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,29 +28,31 @@ interface AddProjectDialogProps {
 export function AddProjectDialog({ children }: AddProjectDialogProps) {
   const [open, setOpen] = useState(false);
   const [replyError, setReplyError] = useState<string>();
-  // const createProject = useCreateProject();
+  const createProject = useCreateProject();
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
 
-    const title = event.currentTarget.elements.name.value;
-    const content = "";
+    const name = event.currentTarget.elements.name.value;
 
-    // const result = await createProject.mutateAsync({
-    //   title,
-    //   content,
-    //   type: "text",
-    //   is_public: true,
-    //   id_programming_language: 1,
-    //   id_project: 3,
-    //   id_user: 1
-    // });
+    const startDate = new Date().toISOString();
+    const endDate = new Date();
+    endDate.setFullYear(endDate.getFullYear() + 1);
+    const status = "active";
+    try {
+      await createProject.mutateAsync({
+        name,
+        description: "",
+        startDate,
+        endDate: endDate.toISOString(),
+        status
+      });
 
-    // if (result.error) {
-    //   setReplyError(result.error);
-    // } else {
-    //   setOpen(false);
-    // }
+      setOpen(false);
+    } catch (error) {
+      console.error("Error creating project:", error);
+      setReplyError("Une erreur est survenue lors de la création du projet.");
+    }
   }
 
   return (
