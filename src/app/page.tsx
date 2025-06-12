@@ -2,11 +2,11 @@
 
 import { Comments } from "@/components/comments";
 import { Note, Notes, Preview } from "@/components/notes";
-import { Projects } from "@/components/projects";
 import { Tags } from "@/components/tags";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Uploads } from "@/components/uploads";
 import { DndContext } from "@dnd-kit/core";
 import { ChevronLeft, ListCollapse } from "lucide-react";
 import { useRef, useState } from "react";
@@ -96,7 +96,7 @@ export default function Home() {
             <TabsList>
               <TabsTrigger value="preview">Preview</TabsTrigger>
               <TabsTrigger value="comment">Commentaires</TabsTrigger>
-              <TabsTrigger value="project">Projets</TabsTrigger>
+              <TabsTrigger value="project">Uploads</TabsTrigger>
               <TabsTrigger value="tags">Tags</TabsTrigger>
             </TabsList>
             <TabsContent value="preview">
@@ -106,7 +106,7 @@ export default function Home() {
               <Comments />
             </TabsContent>
             <TabsContent value="project">
-              <Projects />
+              <Uploads />
             </TabsContent>
             <TabsContent value="tags">
               <Tags />
