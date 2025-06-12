@@ -48,7 +48,7 @@ const CardsView = <T,>({
     {isLoading && <p>Chargement...</p>}
     {isError && <p>Une erreur est survenue</p>}
     {data && data.length === 0 && <p>{emptyText}</p>}
-    <div className="flex gap-2 flex-col md:flex-row">{children}</div>
+    <div className="flex gap-2 flex-col md:flex-row flex-wrap">{children}</div>
   </div>
 );
 
@@ -62,7 +62,7 @@ const chartData = [
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "Notes",
     color: "hsl(var(--chart-1))"
   },
   mobile: {
@@ -95,7 +95,7 @@ export default function Dashboard() {
             <Card key={note.id}>
               <CardHeader>
                 <CardTitle>{note.title}</CardTitle>
-                <CardContent>
+                <CardContent className="max-h-32 overflow-auto">
                   <NoteMarkdown noteContent={note.content} />
                 </CardContent>
               </CardHeader>
