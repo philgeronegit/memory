@@ -55,16 +55,21 @@ export function AddNoteDialog({ children }: AddNoteDialogProps) {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await createNote.mutateAsync({
-      title: data.title,
-      content: data.content,
-      type: "text",
-      is_public: data.isPublic,
-      id_programming_language: 1,
-      id_project: Number(data.projectId),
-      id_user: 1
-    });
-    setOpen(false);
+    try {
+      await createNote.mutateAsync({
+        title: data.title,
+        content: data.content,
+        type: "text",
+        is_public: data.isPublic,
+        id_programming_language: 1,
+        id_project: Number(data.projectId),
+        id_user: 1
+      });
+      setOpen(false);
+    } catch (error) {
+      console.error("Error creating note:", error);
+      setReplyError("Une erreur est survenue lors de la création de la note.");
+    }
   }
 
   return (

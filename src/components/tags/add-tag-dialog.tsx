@@ -35,9 +35,13 @@ export function AddTagDialog({ children }: AddTagDialogProps) {
 
     const name = event.currentTarget.elements.name.value;
 
-    await createTag.mutateAsync({ name });
-
-    setOpen(false);
+    try {
+      await createTag.mutateAsync({ name });
+      setOpen(false);
+    } catch (error) {
+      console.error("Error creating tag:", error);
+      setReplyError("Une erreur est survenue lors de la création du tag.");
+    }
   }
 
   return (
