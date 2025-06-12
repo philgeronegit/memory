@@ -20,7 +20,7 @@ export function Projects() {
           ))}
         </ul>
       )}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p>Chargement...</p>}
       <AddProjectDialog>
         <div className="flex justify-end">
           <Button size="icon" title="Ajouter un projet">

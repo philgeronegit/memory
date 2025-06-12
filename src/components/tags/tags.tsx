@@ -29,7 +29,7 @@ export function Tags() {
           ))}
         </div>
       )}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p>Chargement...</p>}
 
       <AddTagDialog>
         <div className="flex justify-end">
