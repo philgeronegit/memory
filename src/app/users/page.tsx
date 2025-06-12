@@ -38,7 +38,8 @@ export default function Users() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Nom</TableHead>
+              <TableHead className="w-[100px]">Id</TableHead>
+              <TableHead>Nom</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Date création</TableHead>
               <TableHead>Role</TableHead>
@@ -47,7 +48,8 @@ export default function Users() {
           <TableBody>
             {users?.map((user) => (
               <TableRow key={user.id}>
-                <TableCell className="w-[100px]">{user.username}</TableCell>
+                <TableCell className="w-[100px]">{user.id}</TableCell>
+                <TableCell>{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.createdAt.toString()}</TableCell>
                 <TableCell>{user.roleName}</TableCell>
