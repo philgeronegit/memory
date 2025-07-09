@@ -1,8 +1,8 @@
 import { useNotes } from "../queries/use-notes";
 import { useProjects } from "../queries/use-projects";
 
-export function useGetProjects() {
-  const projects = useProjects();
+export function useGetProjects(userId?: number) {
+  const projects = useProjects({ userId });
   const notes = useNotes();
   const projectsWithNotes = projects.data
     ? projects.data.map((project) => {

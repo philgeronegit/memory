@@ -33,4 +33,9 @@ export class ProjectsService {
     const projects = await this.api.getProjects();
     return projects.map(dtoToProject);
   }
+
+  async getUserProjects(userId?: number) {
+    const projects = await this.api.getUserProjects(userId);
+    return projects.map(dtoToProject);
+  }
 }

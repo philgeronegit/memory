@@ -28,12 +28,18 @@ async function getProjects() {
   return response.data;
 }
 
+async function getUserProjects(userId?: number) {
+  const response = await apiClient.get<ProjectDto[]>(`/user/${userId}/project`);
+  return response.data;
+}
+
 const api = {
   createProject,
   updateProject,
   deleteProject,
   getProject,
-  getProjects
+  getProjects,
+  getUserProjects
 };
 
 export default api;

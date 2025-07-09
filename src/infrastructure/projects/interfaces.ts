@@ -6,4 +6,5 @@ export interface ProjectsApi {
   updateProject: (input: UpdateProjectInput) => Promise<ProjectDto>;
   getProject: (id: number) => Promise<ProjectDto>;
   getProjects: () => Promise<ProjectDto[]>;
+  getUserProjects: (userId?: number) => Promise<ProjectDto[]>;
 }
