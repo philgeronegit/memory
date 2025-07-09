@@ -11,6 +11,7 @@ import {
   TableRow
 } from "@/components/ui/table";
 import useNotesStore from "@/store/useNotesStore";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 export default function Messages() {
   const { user } = useNotesStore();
@@ -37,9 +38,9 @@ export default function Messages() {
     );
   }
 
-  const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckChange = (check: CheckedState) => {
     // Handle checkbox change logic here
-    console.log("Checkbox changed:", event.target.checked);
+    console.log("Checkbox changed:", check);
   };
 
   return (
