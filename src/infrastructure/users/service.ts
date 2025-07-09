@@ -1,4 +1,9 @@
-import { LoginInput, UpdateUserInput, UsersApi } from "./interfaces";
+import {
+  CreateUserInput,
+  LoginInput,
+  UpdateUserInput,
+  UsersApi
+} from "./interfaces";
 import { dtoToUser } from "./transform";
 
 export class UsersService {
@@ -8,6 +13,11 @@ export class UsersService {
 
   async login(input: LoginInput) {
     const user = await this.api.login(input);
+    return dtoToUser(user);
+  }
+
+  async createUser(input: CreateUserInput) {
+    const user = await this.api.createUser(input);
     return dtoToUser(user);
   }
 

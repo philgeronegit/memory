@@ -10,8 +10,10 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import { CreateUserDialog } from "@/components/users";
 import { hasPermission } from "@/lib/auth";
 import useNotesStore from "@/store/useNotesStore";
+import { UserPlus2 } from "lucide-react";
 
 export default function Users() {
   const { data: users, isLoading, error } = useUsers();
@@ -59,7 +61,13 @@ export default function Users() {
         </Table>
       )}
 
-      {hasPermission(roleUser, "create:users") && <Button>Créer</Button>}
+      {hasPermission(roleUser, "create:users") && (
+        <CreateUserDialog>
+          <Button size="icon" title="Ajouter un utilisateur">
+            <UserPlus2 />
+          </Button>
+        </CreateUserDialog>
+      )}
     </div>
   );
 }

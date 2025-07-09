@@ -1,6 +1,6 @@
-import UsersApi from "./api";
+import usersApi from "./api";
 import { UsersService } from "./service";
 
-const usersService = new UsersService(UsersApi);
+const usersService = new UsersService(usersApi);
 
 export default usersService;

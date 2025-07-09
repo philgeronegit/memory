@@ -25,6 +25,7 @@ export interface UpdateUserInput {
 
 export interface UsersApi {
   login: (input: LoginInput) => Promise<UserDto>;
+  createUser: (input: CreateUserInput) => Promise<UserDto>;
   updateUser: (input: UpdateUserInput) => Promise<UserDto>;
   getUser: (id: number) => Promise<UserDto>;
   getUsers: () => Promise<UserDto[]>;
