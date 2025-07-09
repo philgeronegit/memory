@@ -14,7 +14,6 @@ const ROLES = {
     "delete:permissions"
   ],
   developer: [
-    "view:users",
     "view:comments",
     "create:comments",
     "update:ownComments",
@@ -42,6 +41,7 @@ const ROLES = {
     "delete:ownNotes"
   ],
   projectManager: [
+    "create:users",
     "view:users",
     "view:tasks",
     "create:tasks",
