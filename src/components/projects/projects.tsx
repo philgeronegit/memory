@@ -2,11 +2,18 @@
 
 import { useGetProjects } from "@/application/get-projects";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { hasPermission } from "@/lib/auth";
+import useNotesStore from "@/store/useNotesStore";
+import { Folder } from "lucide-react";
 import { AddProjectDialog } from "./add-project-dialog";
 
-export function Projects() {
-  const { projects, isLoading, error } = useGetProjects();
+interface ProjectsProps {
+  userId?: number;
+}
+
+export function Projects({ userId }: ProjectsProps) {
+  const { roleUser } = useNotesStore();
+  const { projects, isLoading, error } = useGetProjects(userId);
 
   return (
     <div>
@@ -14,7 +21,7 @@ export function Projects() {
       {!isLoading && (
         <ul>
           {projects?.map((project) => (
-            <li key={project.id} className="hover:bg-slate-100 p-1 rounded">
+            <li key={project.id} className="hover:bg-slate-200 p-1 rounded-lg">
               {project.name} ({project.notes.length} notes)
             </li>
           ))}
@@ -23,9 +30,13 @@ export function Projects() {
       {isLoading && <p>Chargement...</p>}
       <AddProjectDialog>
         <div className="flex justify-end">
-          <Button size="icon" title="Ajouter un projet">
-            <Plus />
-          </Button>
+          {hasPermission(roleUser, "create:projects") && (
+            <AddProjectDialog>
+              <Button size="icon" title="Ajouter un projet">
+                <Folder />
+              </Button>
+            </AddProjectDialog>
+          )}
         </div>
       </AddProjectDialog>
     </div>
