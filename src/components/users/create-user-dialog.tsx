@@ -20,6 +20,14 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,6 +36,9 @@ import { z } from "zod";
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Le nom doit comporter au moins 2 charactères."
+  }),
+  password: z.string().min(4, {
+    message: "Le mot de passe doit comporter au moins 4 charactères."
   }),
   email: z
     .string({
@@ -53,6 +64,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      password: "",
       email: "",
       avatarUrl: "",
       role: 0,
@@ -61,11 +73,10 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-
     try {
       await createUser.mutateAsync({
         username: data.username,
+        password: data.password,
         email: data.email,
         avatar_url: data.avatarUrl,
         id_role: Number(data.role),
@@ -107,6 +118,23 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
                     <FormDescription>
                       Ceci est le nom qui sera affiché dans les commentaires.
                     </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mot de passe</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Entrer votre mot de passe"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
