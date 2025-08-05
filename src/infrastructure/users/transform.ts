@@ -11,6 +11,8 @@ export function dtoToUser(dto: UserDto): User {
     isAdmin: dto.is_admin,
     idRole: dto.id_role,
     roleName: dto.role_name,
-    roleValue: dto.role_value
+    roleValue: dto.role_value,
+    access_token: dto.access_token,
+    expires_in: dto.expires_in
   };
 }

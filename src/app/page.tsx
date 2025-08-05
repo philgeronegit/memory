@@ -1,12 +1,15 @@
 "use client";
 
+import { AuthWrapper } from "@/components/auth/auth-wrapper";
 import { Comments } from "@/components/comments";
 import { Note, Notes, Preview } from "@/components/notes";
+import { Projects } from "@/components/projects";
 import { Tags } from "@/components/tags";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Uploads } from "@/components/uploads";
+import useNotesStore from "@/store/useNotesStore";
 import { DndContext } from "@dnd-kit/core";
 import { ChevronLeft, ListCollapse } from "lucide-react";
 import { useRef, useState } from "react";
@@ -17,7 +20,6 @@ import {
   PanelResizeHandle
 } from "react-resizable-panels";
 import { useMedia } from "react-use";
-
 export default function Home() {
   const ref = useRef<ImperativePanelHandle>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -26,6 +28,7 @@ export default function Home() {
   const [orientation, setOrientation] = useState<"horizontal" | "vertical">(
     "horizontal"
   );
+  const { user } = useNotesStore();
 
   const togglePanel = () => {
     if (!isWide) {
@@ -50,6 +53,7 @@ export default function Home() {
         <DrawerContent>
           <div className="h-full border border-slate-300 p-1">
             <Notes />
+            <Projects userId={user?.id} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -64,6 +68,7 @@ export default function Home() {
       <Panel defaultSize={25} minSize={20}>
         <div className="h-full border border-slate-300 p-1">
           <Notes />
+          <Projects userId={user?.id} />
         </div>
       </Panel>
 
@@ -81,7 +86,6 @@ export default function Home() {
         minSize={20}
         ref={ref}
         onResize={(size) => {
-          console.log("Panel resized:", size);
           if (size < 30) {
             setOrientation("vertical");
           } else {
@@ -118,19 +122,21 @@ export default function Home() {
   );
 
   return (
-    <DndContext>
-      <div className="h-full">
-        <div className="flex justify-end">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={togglePanel}
-            title="Toggle panel">
-            {collapsed ? <ChevronLeft /> : <ListCollapse />}
-          </Button>
+    <AuthWrapper>
+      <DndContext>
+        <div className="h-full">
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={togglePanel}
+              title="Toggle panel">
+              {collapsed ? <ChevronLeft /> : <ListCollapse />}
+            </Button>
+          </div>
+          {isWide ? desktopLayout : mobileLayout}
         </div>
-        {isWide ? desktopLayout : mobileLayout}
-      </div>
-    </DndContext>
+      </DndContext>
+    </AuthWrapper>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useUsers } from "@/application/queries/use-users";
+import { AuthWrapper } from "@/components/auth/auth-wrapper";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,7 +15,6 @@ import { CreateUserDialog } from "@/components/users";
 import { hasPermission } from "@/lib/auth";
 import useNotesStore from "@/store/useNotesStore";
 import { UserPlus2 } from "lucide-react";
-
 export default function Users() {
   const { data: users, isLoading, error } = useUsers();
   const { roleUser } = useNotesStore();
@@ -35,39 +35,41 @@ export default function Users() {
   }
 
   return (
-    <div className="p-2">
-      {hasPermission(roleUser, "view:users") && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Id</TableHead>
-              <TableHead>Nom</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Date création</TableHead>
-              <TableHead>Role</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users?.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="w-[100px]">{user.id}</TableCell>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.createdAt.toString()}</TableCell>
-                <TableCell>{user.roleName}</TableCell>
+    <AuthWrapper>
+      <div className="p-2">
+        {hasPermission(roleUser, "view:users") && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Id</TableHead>
+                <TableHead>Nom</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Date création</TableHead>
+                <TableHead>Role</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+            </TableHeader>
+            <TableBody>
+              {users?.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="w-[100px]">{user.id}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.createdAt.toString()}</TableCell>
+                  <TableCell>{user.roleName}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
 
-      {hasPermission(roleUser, "create:users") && (
-        <CreateUserDialog>
-          <Button size="icon" title="Ajouter un utilisateur">
-            <UserPlus2 />
-          </Button>
-        </CreateUserDialog>
-      )}
-    </div>
+        {hasPermission(roleUser, "create:users") && (
+          <CreateUserDialog>
+            <Button size="icon" title="Ajouter un utilisateur">
+              <UserPlus2 />
+            </Button>
+          </CreateUserDialog>
+        )}
+      </div>
+    </AuthWrapper>
   );
 }

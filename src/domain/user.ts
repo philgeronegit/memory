@@ -8,4 +8,6 @@ export interface User {
   idRole: number;
   roleName: string;
   roleValue: string;
+  access_token: string;
+  expires_in: number;
 }
