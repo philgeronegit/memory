@@ -18,7 +18,7 @@ export const Node = ({
       style={style}
       ref={dragHandle}
       className={cn("flex flex-row justify-between items-center", {
-        "bg-slate-200": node.state.isSelected || isSelected
+        "bg-slate-200 rounded-lg": node.state.isSelected || isSelected
       })}>
       <div
         className={cn("flex flex-row gap-2 overflow-hidden")}
