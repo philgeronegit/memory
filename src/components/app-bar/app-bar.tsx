@@ -1,6 +1,5 @@
 "use client";
 
-import { useLogin } from "@/application/mutations/use-login";
 import { useUserMessages } from "@/application/queries/use-user-messages";
 import { OptionsDialog } from "@/components/options";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,14 +18,13 @@ import {
   MenubarMenu,
   MenubarTrigger
 } from "@/components/ui/menubar";
-import { useToast } from "@/hooks/use-toast";
-import { hasPermission, Roles } from "@/lib/auth";
+import { hasPermission } from "@/lib/auth";
 import useNotesStore from "@/store/useNotesStore";
 import { Ellipsis, LogIn, Mail } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useEffectOnce, useMedia } from "react-use";
+import { useMedia } from "react-use";
 import { Button } from "../ui/button";
 import { LoginDialog } from "../users";
 
@@ -55,7 +53,8 @@ const links = [
   { label: "Messages", path: "/messages" },
   { label: "Uploads", path: "/uploads" },
   { label: "Kanban", path: "/kanban" },
-  { label: "Utilisateurs", path: "/users" }
+  { label: "Utilisateurs", path: "/users" },
+  { label: "Projets", path: "/projects" }
 ];
 
 export const AppBar = () => {
@@ -63,7 +62,7 @@ export const AppBar = () => {
   const [open, setOpen] = useState(false);
   const [isOptionsDialogOpen, setOptionsDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { user, roleUser } = useNotesStore();
+  const { roleUser, setLoggedIn, setSelectedNoteId, user } = useNotesStore();
   const avatarUrl = user?.avatarUrl;
   const username = user?.username;
   const initials = username
@@ -72,10 +71,7 @@ export const AppBar = () => {
     .join("");
   const email = user?.email;
   const role = user?.roleName;
-  const login = useLogin();
-  const { setUser, setRoleUser } = useNotesStore();
   const router = useRouter();
-  const { toast } = useToast();
   const isWide = useMedia("(min-width: 480px)");
   const { data: userMessages, isLoading: isLoadingMessages } = useUserMessages({
     userId: user?.id
@@ -84,39 +80,14 @@ export const AppBar = () => {
     userMessages && userMessages.some((message) => !message.readAt);
   const hasMessages = userMessages && userMessages.length > 0;
 
-  useEffectOnce(() => {
-    const runAsync = async () => {
-      try {
-        const user = await login.mutateAsync({
-          username: "philgerone",
-          password: "1234"
-        });
-        setUser(user);
-        setRoleUser({
-          id: user.id ?? 0,
-          role: (user.roleValue as keyof Roles) ?? "external"
-        });
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        toast({
-          variant: "destructive",
-          title: "Erreur lors de la connexion",
-          description: (error as Error).message
-        });
-      }
-    };
-    runAsync();
-  });
-
   const handleMenuItemClick = (itemName: string) => {
     if (itemName === "modify-pasword") {
       router.push("/profile/change-password");
     } else if (itemName === "settings") {
       setOptionsDialogOpen(true);
     } else if (itemName === "logout") {
-      setUser(undefined);
-      setRoleUser(undefined);
-      router.push("/login");
+      setSelectedNoteId(0);
+      setLoggedIn(false);
     }
   };
 
@@ -165,13 +136,20 @@ export const AppBar = () => {
           {isWide && (
             <CustomLink pathname={pathname} path={"/kanban"} label="Kanban" />
           )}
-          {isWide && hasPermission(roleUser, "view:users") ? (
+          {isWide && hasPermission(roleUser, "view:users") && (
             <CustomLink
               pathname={pathname}
               path={"/users"}
               label="Utilisateurs"
             />
-          ) : null}
+          )}
+          {isWide && hasPermission(roleUser, "view:projects") && (
+            <CustomLink
+              pathname={pathname}
+              path={"/projects"}
+              label="Projets"
+            />
+          )}
         </div>
       )}
       {!user && (
