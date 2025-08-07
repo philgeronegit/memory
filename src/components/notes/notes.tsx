@@ -245,7 +245,7 @@ export function Notes() {
           <SearchSelect onValueChange={setSearchType} />
         </div>
         <Input
-          type="text"
+          type="search"
           placeholder="Recherche..."
           className="search-input"
           value={term}
