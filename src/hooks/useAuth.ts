@@ -1,7 +1,6 @@
 "use client";
 
 import { useLogin } from "@/application/mutations/use-login";
-import { Roles } from "@/lib/auth";
 import useNotesStore from "@/store/useNotesStore";
 import { useState } from "react";
 
@@ -18,12 +17,6 @@ export const useAuth = () => {
       });
       setLoggedIn(true, user.access_token);
       setUser(user);
-      if (user?.id) {
-        setRoleUser({
-          id: user.id,
-          role: user.roleValue as keyof Roles
-        });
-      }
       return { success: true, user };
     } catch (error) {
       if (error instanceof Error) {

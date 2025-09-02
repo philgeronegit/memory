@@ -1,5 +1,5 @@
 import { User } from "@/domain/user";
-import { RoleUser } from "@/lib/auth";
+import { Roles, RoleUser } from "@/lib/auth";
 import { authCookies } from "@/lib/auth-cookies";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -39,6 +39,9 @@ const useNotesStore = create<NotesState>()(
         set({ user });
         if (user) {
           authCookies.setUserCookie(user);
+          set({
+            roleUser: { id: user.id, role: user.roleValue as keyof Roles }
+          });
         } else {
           authCookies.removeUserCookie();
         }
