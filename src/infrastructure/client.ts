@@ -21,6 +21,12 @@ instance.interceptors.response.use(
       // or retry the request (with caution to avoid infinite loops)
       return Promise.reject(error); // Propagate the error
     }
+    if (error.response && error.response.status === 401) {
+      console.error("Unauthorized error:", error);
+      // redirect to login route
+      // window.location.href = "/login";
+      return Promise.reject(error);
+    }
     return Promise.reject(error); // If not a 500 error, still reject
   }
 );
@@ -29,6 +35,12 @@ instance.interceptors.request.use((config) => {
   if (config.headers && config.url !== "/login") {
     const token = authCookies.getAuthCookie();
     if (token) {
+      // check if token is still valid
+      const isValid = authCookies.isTokenExpired(token);
+      if (!isValid) {
+        // If token is invalid, redirect to login
+        // window.location.href = "/login";
+      }
       config.headers["Authorization"] = `Bearer ${token}`;
       config.withCredentials = true;
     }

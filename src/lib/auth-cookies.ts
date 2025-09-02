@@ -3,6 +3,29 @@ export const USER_COOKIE_NAME = "user-data";
 
 // Simple cookie utilities without external dependencies
 export const authCookies = {
+  isTokenExpired: (token: string): boolean => {
+    try {
+      // Basic validation - token should have 3 parts separated by dots
+      if (!token || token.split(".").length !== 3) {
+        return true;
+      }
+
+      // Decode JWT token to check expiration
+      const payload = JSON.parse(atob(token.split(".")[1]));
+
+      // Check if token has expiration field
+      if (!payload.exp) {
+        return true;
+      }
+
+      const currentTime = Math.floor(Date.now() / 1000);
+      return payload.exp < currentTime;
+    } catch {
+      // If token can't be decoded, consider it expired
+      return true;
+    }
+  },
+
   setAuthCookie: (token: string) => {
     if (typeof document !== "undefined") {
       const expires = new Date();

@@ -10,29 +10,6 @@ interface AuthWrapperProps {
   children: React.ReactNode;
 }
 
-const isTokenExpired = (token: string): boolean => {
-  try {
-    // Basic validation - token should have 3 parts separated by dots
-    if (!token || token.split(".").length !== 3) {
-      return true;
-    }
-
-    // Decode JWT token to check expiration
-    const payload = JSON.parse(atob(token.split(".")[1]));
-
-    // Check if token has expiration field
-    if (!payload.exp) {
-      return true;
-    }
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    return payload.exp < currentTime;
-  } catch {
-    // If token can't be decoded, consider it expired
-    return true;
-  }
-};
-
 export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
   const { isLoggedIn, setLoggedIn, setUser } = useNotesStore();
   const router = useRouter();
@@ -43,7 +20,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
     const userCookie = authCookies.getUserCookie();
 
     // Check if auth cookie exists and contains a valid token
-    if (!authCookie || isTokenExpired(authCookie)) {
+    if (!authCookie || authCookies.isTokenExpired(authCookie)) {
       setLoggedIn(false);
       authCookies.clearAllAuthCookies();
       return false;
