@@ -1,5 +1,7 @@
 import { AppBar } from "@/components/app-bar";
 import { Toaster } from "@/components/ui/toaster";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -27,9 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-[96vh]`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="antialiased flex flex-col h-[96vh]">
         <Providers>
           <AppBar />
           {children}
