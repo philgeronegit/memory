@@ -13,6 +13,7 @@ export interface Task {
   columnId: ColumnId;
   title: string;
   content: string;
+  order?: number;
 }
 
 interface TaskCardProps {

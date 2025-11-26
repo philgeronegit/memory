@@ -12,6 +12,21 @@ export interface TaskDto {
   id_project: number;
   id_executive: number;
   id_developer: number;
+  task_order: number;
+}
+
+export interface BulkUpdateTaskOrderInput {
+  tasks: UpdateTaskOrderInput[];
+}
+
+export interface CreateTaskInput {
+  title: string;
+  description: string;
+  id_status: number;
+  id_project: number;
+  id_executive?: number;
+  id_developer?: number;
+  priority?: string;
 }
 
 export interface UpdateTaskInput {
@@ -19,4 +34,13 @@ export interface UpdateTaskInput {
   title?: string;
   description?: string;
   id_status?: string;
+  order?: number;
 }
+
+export interface UpdateTaskOrderInput {
+  id: number;
+  order: number;
+  status?: string;
+}
+
+

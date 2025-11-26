@@ -15,6 +15,7 @@ export function dtoToTask(dto: TaskDto): Task {
     priority: dto.priority,
     idProject: dto.id_project,
     idExecutive: dto.id_executive,
-    idDeveloper: dto.id_developer
+    idDeveloper: dto.id_developer,
+    order: dto.task_order
   };
 }

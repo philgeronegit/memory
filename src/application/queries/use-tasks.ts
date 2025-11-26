@@ -1,13 +1,18 @@
 import TasksService from "@/infrastructure/tasks";
 import { useQuery } from "@tanstack/react-query";
 
-export function getQueryKey() {
-  return ["tasks"];
+interface GetTasksInput {
+  userId?: number;
 }
 
-export function useTasks() {
+export function getQueryKey(userId?: number) {
+  return ["tasks", userId];
+}
+
+export function useTasks({ userId }: GetTasksInput = {}) {
   return useQuery({
-    queryKey: getQueryKey(),
-    queryFn: () => TasksService.getTasks()
+    queryKey: getQueryKey(userId),
+    queryFn: () => TasksService.getUserTasks(userId),
+    enabled: !!userId
   });
 }

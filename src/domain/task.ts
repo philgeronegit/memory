@@ -12,4 +12,5 @@ export interface Task {
   idProject: number;
   idExecutive: number;
   idDeveloper: number;
+  order: number;
 }
