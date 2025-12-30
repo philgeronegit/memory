@@ -1,7 +1,8 @@
 "use client";
 
 import { useNotes } from "@/application/queries/use-notes";
-import { useProjects } from "@/application/queries/use-projects";
+import { useNotesCount } from "@/application/queries/use-notes-count";
+import { useUserProjects } from "@/application/queries/use-projects";
 import { useTasks } from "@/application/queries/use-tasks";
 import { AuthWrapper } from "@/components/auth";
 import { NoteMarkdown } from "@/components/notes/note-markdown";
@@ -18,6 +19,8 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from "@/components/ui/chart";
+import useNotesStore from "@/store/useNotesStore";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -53,14 +56,6 @@ const CardsView = <T,>({
   </div>
 );
 
-const chartData = [
-  { month: "Novembre", desktop: 7, mobile: 8 },
-  { month: "Décembre", desktop: 8, mobile: 8 },
-  { month: "Janvier", desktop: 6, mobile: 8 },
-  { month: "Février", desktop: 5, mobile: 2 },
-  { month: "Mars", desktop: 7, mobile: 12 }
-];
-
 const chartConfig = {
   desktop: {
     label: "Notes",
@@ -75,13 +70,34 @@ const chartConfig = {
   }
 } satisfies ChartConfig;
 
+interface chartDataItem {
+  month: string;
+  desktop: number;
+  mobile: number;
+}
+
 export default function Dashboard() {
-  const notes = useNotes();
-  const projects = useProjects();
+  const { roleUser } = useNotesStore();
+  const userId = roleUser?.id;
+  const notes = useNotes({ userId });
+  const notesCount = useNotesCount({ userId });
+  const projects = useUserProjects({ userId });
   const projectsData = projects?.data ?? [];
-  const tasks = useTasks();
+  const tasks = useTasks({ userId });
   const tasksData = tasks?.data ?? [];
   const mostRecentNotes = notes.data?.slice(0, 3) ?? [];
+  const [chartData, setChartData] = useState<chartDataItem[]>([]);
+
+  useEffect(() => {
+    if (notesCount?.data) {
+      const formattedData = notesCount.data.map((item) => ({
+        month: item.monthName,
+        desktop: item.itemCount,
+        mobile: item.itemCount
+      }));
+      setChartData(formattedData);
+    }
+  }, [notesCount.data]);
 
   return (
     <AuthWrapper>
