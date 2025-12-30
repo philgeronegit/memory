@@ -21,8 +21,6 @@ async function createNoteTag(input: CreateNoteTagInput) {
 }
 
 async function updateNoteTag(input: UpdateNoteTagInput) {
-  console.log("🚀 ~ updateNoteTag ~ input:", input);
-  // const ids = input.tagIds.join(",");
   const response = await apiClient.put<TagDto>(
     `/note/${input.idNote}/tag`,
     input
