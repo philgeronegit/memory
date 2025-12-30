@@ -1,18 +1,19 @@
 import { useNotes } from "../queries/use-notes";
-import { useProjects } from "../queries/use-projects";
+import { useUserProjects } from "../queries/use-projects";
 
 export function useGetProjects(userId?: number) {
-  const projects = useProjects({ userId });
-  const notes = useNotes();
+  const projects = useUserProjects({ userId });
+  const notes = useNotes({ userId });
   const projectsWithNotes = projects.data
     ? projects.data.map((project) => {
-        return {
-          ...project,
-          notes: notes.data
-            ? notes.data.filter((note) => note.projectId === project.id)
-            : []
-        };
-      })
+      return {
+        ...project,
+        id: String("P" + project.id), // to avoid conflict with note IDs
+        notes: notes.data
+          ? notes.data.filter((note) => note.projectId === project.id)
+          : []
+      };
+    })
     : [];
   const notesWithoutProject = notes.data
     ? notes.data.filter((note) => !note.projectId)
