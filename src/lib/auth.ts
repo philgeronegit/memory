@@ -1,5 +1,13 @@
 const ROLES = {
   admin: [
+    "view:comments",
+    "create:comments",
+    "update:ownComments",
+    "delete:ownComments",
+    "view:notes",
+    "create:notes",
+    "update:ownNotes",
+    "delete:ownNotes",
     "view:users",
     "create:users",
     "update:users",
@@ -11,7 +19,11 @@ const ROLES = {
     "view:permissions",
     "create:permissions",
     "update:permissions",
-    "delete:permissions"
+    "delete:permissions",
+    "view:tasks",
+    "create:tasks",
+    "update:tasks",
+    "delete:tasks",
   ],
   developer: [
     "view:comments",
