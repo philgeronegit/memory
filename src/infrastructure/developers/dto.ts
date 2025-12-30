@@ -8,6 +8,8 @@ export interface DeveloperDto {
   id_role: number;
   role_name: string;
   role_value: string;
+  access_token: string;
+  expires_in: number;
 }
 
 export interface CreateDeveloperInput {
