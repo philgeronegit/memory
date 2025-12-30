@@ -9,9 +9,16 @@ export interface UpdateMessageInput {
   text: string;
 }
 
+export interface UpdateMessageForUserInput {
+  id: number;
+  userId: number;
+  readAt: Date | null;
+}
+
 export interface MessagesApi {
   getMessage: (id: number) => Promise<MessageDto>;
   getMessages: () => Promise<MessageDto[]>;
   getUserMessages: (userId: number) => Promise<MessageDto[]>;
   updateMessage: (input: UpdateMessageInput) => Promise<MessageDto>;
+  updateMessageForUser: (input: UpdateMessageForUserInput) => Promise<MessageDto>;
 }

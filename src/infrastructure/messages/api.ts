@@ -1,6 +1,6 @@
 import { apiClient } from "../client";
 import { MessageDto } from "./dto";
-import { UpdateMessageInput } from "./interfaces";
+import { UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
 
 async function getMessage(id: number) {
   const response = await apiClient.get<MessageDto>(`/message/${id}`);
@@ -25,6 +25,14 @@ async function updateMessage(input: UpdateMessageInput) {
   return response.data;
 }
 
-const api = { getMessage, getMessages, getUserMessages, updateMessage };
+async function updateMessageForUser(input: UpdateMessageForUserInput) {
+  const response = await apiClient.put<MessageDto>(
+    `/user/${input.userId}/message/${input.id}`,
+    { "read_at": input.readAt ? input.readAt.toISOString() : null }
+  );
+  return response.data;
+}
+
+const api = { getMessage, getMessages, getUserMessages, updateMessage, updateMessageForUser };
 
 export default api;

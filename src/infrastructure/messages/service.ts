@@ -1,4 +1,4 @@
-import { MessagesApi, UpdateMessageInput } from "./interfaces";
+import { MessagesApi, UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
 import { dtoToMessage } from "./transform";
 
 export class MessagesService {
@@ -26,6 +26,11 @@ export class MessagesService {
 
   async updateMessage(input: UpdateMessageInput) {
     const message = await this.api.updateMessage(input);
+    return dtoToMessage(message);
+  }
+
+  async updateMessageForUser(input: UpdateMessageForUserInput) {
+    const message = await this.api.updateMessageForUser(input);
     return dtoToMessage(message);
   }
 }
