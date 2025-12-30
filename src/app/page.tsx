@@ -3,7 +3,6 @@
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
 import { Comments } from "@/components/comments";
 import { Note, Notes, Preview } from "@/components/notes";
-import { Projects } from "@/components/projects";
 import { Tags } from "@/components/tags";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
@@ -20,6 +19,7 @@ import {
   PanelResizeHandle
 } from "react-resizable-panels";
 import { useMedia } from "react-use";
+
 export default function Home() {
   const ref = useRef<ImperativePanelHandle>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -53,7 +53,6 @@ export default function Home() {
         <DrawerContent>
           <div className="h-full border border-slate-300 p-1">
             <Notes />
-            <Projects userId={user?.id} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -68,7 +67,6 @@ export default function Home() {
       <Panel defaultSize={25} minSize={20}>
         <div className="h-full border border-slate-300 p-1">
           <Notes />
-          <Projects userId={user?.id} />
         </div>
       </Panel>
 
