@@ -9,4 +9,9 @@ async function logout() {
   await apiClient.post("/logout");
 }
 
-export default { login, logout };
+const api = {
+  login,
+  logout
+};
+
+export default api;
