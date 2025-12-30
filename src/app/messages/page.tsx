@@ -1,6 +1,7 @@
 "use client";
 
 import { useUserMessages } from "@/application/queries/use-user-messages";
+import { AuthWrapper } from '@/components/auth';
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -44,32 +45,36 @@ export default function Messages() {
   };
 
   return (
-    <div className="p-2">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Utilisateur</TableHead>
-            <TableHead>Texte</TableHead>
-            <TableHead>Date création</TableHead>
-            <TableHead>Lu</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {messages?.map((message) => (
-            <TableRow key={message.id}>
-              <TableCell className="w-[100px]">{message.userId}</TableCell>
-              <TableCell>{message.text}</TableCell>
-              <TableCell>{message.createdAt.toLocaleDateString()}</TableCell>
-              <TableCell>
-                <Checkbox
-                  checked={message.readAt ? true : false}
-                  onCheckedChange={handleCheckChange}
-                />
-              </TableCell>
+    <AuthWrapper>
+      <div className="p-2">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Utilisateur</TableHead>
+              <TableHead>Texte</TableHead>
+              <TableHead>Date création</TableHead>
+              <TableHead>Lu</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {messages?.map((message) => (
+              <TableRow key={message.id}>
+                <TableCell className="w-[100px]">{message.userId}</TableCell>
+                <TableCell>{message.text}</TableCell>
+                <TableCell>
+                  {message.createdAt.toLocaleDateString("fr-FR")}
+                </TableCell>
+                <TableCell>
+                  <Checkbox
+                    checked={message.readAt ? true : false}
+                    onCheckedChange={handleCheckChange}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AuthWrapper>
   );
 }
