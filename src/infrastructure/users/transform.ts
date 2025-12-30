@@ -1,5 +1,12 @@
-import { User } from "@/domain/user";
+import { BaseUser, User } from "@/domain/user";
 import { UserDto } from "./dto";
+
+export function dtoToBaseUser(dto: UserDto): BaseUser {
+  return {
+    id: dto.id_user,
+    username: dto.username
+  };
+}
 
 export function dtoToUser(dto: UserDto): User {
   return {

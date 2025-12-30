@@ -14,6 +14,11 @@ export interface LoginInput {
   password: string;
 }
 
+export interface UpdatePasswordInput {
+  id: number;
+  password: string;
+}
+
 export interface UpdateUserInput {
   id: number;
   username?: string;
@@ -24,9 +29,12 @@ export interface UpdateUserInput {
 }
 
 export interface UsersApi {
-  login: (input: LoginInput) => Promise<UserDto>;
   createUser: (input: CreateUserInput) => Promise<UserDto>;
-  updateUser: (input: UpdateUserInput) => Promise<UserDto>;
+  deleteUser: (id: number) => Promise<void>;
+  getProjectUsers: (projectId?: number) => Promise<UserDto[]>;
   getUser: (id: number) => Promise<UserDto>;
   getUsers: () => Promise<UserDto[]>;
+  login: (input: LoginInput) => Promise<UserDto>;
+  updatePassword: (input: UpdatePasswordInput) => Promise<void>;
+  updateUser: (input: UpdateUserInput) => Promise<UserDto>;
 }

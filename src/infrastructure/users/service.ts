@@ -1,6 +1,7 @@
 import {
   CreateUserInput,
   LoginInput,
+  UpdatePasswordInput,
   UpdateUserInput,
   UsersApi
 } from "./interfaces";
@@ -11,14 +12,19 @@ export class UsersService {
     this.api = api;
   }
 
-  async login(input: LoginInput) {
-    const user = await this.api.login(input);
-    return dtoToUser(user);
-  }
 
   async createUser(input: CreateUserInput) {
     const user = await this.api.createUser(input);
     return dtoToUser(user);
+  }
+
+  async deleteUser(id: number) {
+    await this.api.deleteUser(id);
+  }
+
+  async getProjectUsers(projectId?: number) {
+    const users = await this.api.getProjectUsers(projectId);
+    return users.map(dtoToUser);
   }
 
   async getUser(id: number) {
@@ -29,6 +35,15 @@ export class UsersService {
   async getUsers() {
     const users = await this.api.getUsers();
     return users.map(dtoToUser);
+  }
+
+  async login(input: LoginInput) {
+    const user = await this.api.login(input);
+    return dtoToUser(user);
+  }
+
+  async updatePassword(input: UpdatePasswordInput) {
+    await this.api.updatePassword(input);
   }
 
   async updateUser(input: UpdateUserInput) {
