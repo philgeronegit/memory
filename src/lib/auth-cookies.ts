@@ -7,6 +7,7 @@ export const authCookies = {
     try {
       // Basic validation - token should have 3 parts separated by dots
       if (!token || token.split(".").length !== 3) {
+        console.log("🚀 ~ isTokenExpired : Invalid token format");
         return true;
       }
 
@@ -15,12 +16,15 @@ export const authCookies = {
 
       // Check if token has expiration field
       if (!payload.exp) {
+        console.log("🚀 ~ isTokenExpired : Token missing expiration field");
         return true;
       }
 
       const currentTime = Math.floor(Date.now() / 1000);
-      return payload.exp < currentTime;
+      const isTokenExpired = payload.exp < currentTime;
+      return isTokenExpired;
     } catch {
+      console.log("🚀 ~ isTokenExpired : Error decoding token");
       // If token can't be decoded, consider it expired
       return true;
     }
@@ -30,9 +34,8 @@ export const authCookies = {
     if (typeof document !== "undefined") {
       const expires = new Date();
       expires.setTime(expires.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      document.cookie = `${AUTH_COOKIE_NAME}=${token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${
-        process.env.NODE_ENV === "production" ? "; Secure" : ""
-      }`;
+      document.cookie = `${AUTH_COOKIE_NAME}=${token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${process.env.NODE_ENV === "production" ? "; Secure" : ""
+        }`;
     }
   },
 
@@ -65,9 +68,8 @@ export const authCookies = {
       expires.setTime(expires.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
       document.cookie = `${USER_COOKIE_NAME}=${encodeURIComponent(
         JSON.stringify(userData)
-      )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${
-        process.env.NODE_ENV === "production" ? "; Secure" : ""
-      }`;
+      )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${process.env.NODE_ENV === "production" ? "; Secure" : ""
+        }`;
     }
   },
 
