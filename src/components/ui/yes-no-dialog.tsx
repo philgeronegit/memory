@@ -3,6 +3,7 @@ import { Button } from "./button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle
@@ -23,13 +24,22 @@ export const YesNoDialog: React.FC<YesNoDialogProps> = ({
   title,
   message
 }) => {
+  const handleOpenChange = React.useCallback(
+    (open: boolean) => {
+      if (!open) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{message}</DialogDescription>
         </DialogHeader>
-        <div className="py-4">{message}</div>
         <DialogFooter>
           <Button onClick={onClose} variant="secondary">
             Non
