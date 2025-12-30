@@ -1,5 +1,6 @@
 "use client";
 
+import { useUpdateMessageForUser } from '@/application/mutations/use-update-message-for-user';
 import { useUserMessages } from "@/application/queries/use-user-messages";
 import { AuthWrapper } from '@/components/auth';
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,6 +12,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import { Message } from '@/domain/message';
 import useNotesStore from "@/store/useNotesStore";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
@@ -23,6 +25,7 @@ export default function Messages() {
   } = useUserMessages({
     userId: user?.id
   });
+  const updateMessageForUser = useUpdateMessageForUser();
 
   if (isLoading) {
     return (
@@ -39,9 +42,16 @@ export default function Messages() {
     );
   }
 
-  const handleCheckChange = (check: CheckedState) => {
-    // Handle checkbox change logic here
-    console.log("Checkbox changed:", check);
+  const handleCheckChange = (check: CheckedState, message: Message) => {
+    if (!user) return;
+    if (!message) return;
+
+    const readAt = check === true ? new Date() : null;
+    updateMessageForUser.mutateAsync({
+      id: message.id,
+      userId: user?.id,
+      readAt
+    });
   };
 
   return (
@@ -67,7 +77,7 @@ export default function Messages() {
                 <TableCell>
                   <Checkbox
                     checked={message.readAt ? true : false}
-                    onCheckedChange={handleCheckChange}
+                    onCheckedChange={(check) => handleCheckChange(check, message)}
                   />
                 </TableCell>
               </TableRow>
