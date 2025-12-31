@@ -3,7 +3,7 @@
 import { useNotes } from "@/application/queries/use-notes";
 import { useNotesCount } from "@/application/queries/use-notes-count";
 import { useUserProjects } from "@/application/queries/use-projects";
-import { useTasks } from "@/application/queries/use-tasks";
+import { useUserTasks } from '@/application/queries/use-user-tasks';
 import { AuthWrapper } from "@/components/auth";
 import { NoteMarkdown } from "@/components/notes/note-markdown";
 import {
@@ -83,7 +83,7 @@ export default function Dashboard() {
   const notesCount = useNotesCount({ userId });
   const projects = useUserProjects({ userId });
   const projectsData = projects?.data ?? [];
-  const tasks = useTasks({ userId });
+  const tasks = useUserTasks({ userId });
   const tasksData = tasks?.data ?? [];
   const mostRecentNotes = notes.data?.slice(0, 3) ?? [];
   const [chartData, setChartData] = useState<chartDataItem[]>([]);
