@@ -32,7 +32,6 @@ export default function Users() {
   const { data: users, isLoading, error } = useUsers();
   const { roleUser } = useNotesStore();
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
-  console.log('🚀 ~ Users ~ selectedUser:', selectedUser);
   const [isDeleteUserDialogOpen, setIsDeleteUserDialogOpen] = useState(false);
   const [isModifyPasswordDialogOpen, setIsModifyPasswordDialogOpen] = useState(false);
   const [isModifyUserDialogOpen, setIsModifyUserDialogOpen] = useState(false);
