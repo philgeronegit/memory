@@ -62,7 +62,6 @@ export function AddTaskDialog({ children }: AddTaskDialogProps) {
   const { data: projects, isLoading: isLoadingProjects } = useProjects();
   const { data: users, isLoading: isLoadingUsers } = useUsers();
   const { data: statuses, isLoading: isLoadingStatuses } = useStatuses();
-  console.log('🚀 ~ AddTaskDialog ~ statuses:', statuses);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -64,7 +64,6 @@ export function ModifyTaskDialog({ task, open, onOpenChange }: ModifyTaskDialogP
   const { data: projects, isLoading: isLoadingProjects } = useProjects();
   const { data: users, isLoading: isLoadingUsers } = useUsers();
   const { data: statuses, isLoading: isLoadingStatuses } = useStatuses();
-  console.log('🚀 ~ ModifyTaskDialog ~ statuses:', statuses);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
