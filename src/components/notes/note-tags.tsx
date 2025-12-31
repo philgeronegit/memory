@@ -47,7 +47,6 @@ export function NoteTags() {
       return;
     }
     const tag = await createTag.mutateAsync({ name });
-    console.log("🚀 ~ onCreateNewTag ~ tag:", tag);
     // await updateNoteTag.mutateAsync({
     //   idNote: selectedNoteId,
     //   tagIds: tags.map((tag) => Number(tag))

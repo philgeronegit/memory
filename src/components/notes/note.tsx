@@ -31,7 +31,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { NoteTags } from "./note-tags";
-import { ShareProjectDialog } from "./share-project-dialog";
+import { ShareNoteDialog } from "./share-project-dialog";
 
 export function Note() {
   const { toast } = useToast();
@@ -378,8 +378,8 @@ export function Note() {
         <NoteTags />
       </div>
 
-      <ShareProjectDialog
-        projectId={note.projectId}
+      <ShareNoteDialog
+        note={note}
         open={shareDialogOpen}
         onOpenChange={setShareDialogOpen}
       />

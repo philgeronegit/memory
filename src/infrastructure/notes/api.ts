@@ -3,6 +3,7 @@ import {
   CreateNoteInput,
   NoteCountDto,
   NoteDto,
+  ShareNoteInput,
   UpdateNoteInput,
   UpdateNoteScoreInput
 } from "./dto";
@@ -42,7 +43,15 @@ async function getUserNotes(userId?: number) {
 async function getUserNotesCount(userId?: number) {
   const url = `/user/${userId}/note?count=true`;
   const response = await apiClient.get<NoteCountDto[]>(url);
-  console.log('🚀 ~ getUserNotesCount ~ response:', response);
+  return response.data;
+}
+
+async function shareNote(input: ShareNoteInput) {
+  const url = `/note/${input.note_id}/share`;
+  const response = await apiClient.post<NoteDto>(url, {
+    id_item: input.note_id,
+    id_user: input.user_id
+  });
   return response.data;
 }
 
@@ -67,6 +76,7 @@ const api = {
   getNotes,
   getUserNotes,
   getUserNotesCount,
+  shareNote,
   updateNote,
   updateNoteScore
 };

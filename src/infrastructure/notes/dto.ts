@@ -36,6 +36,12 @@ export interface CreateNoteInput {
   id_project?: number;
   id_user: number;
 }
+
+export interface ShareNoteInput {
+  note_id: number;
+  user_id: number;
+}
+
 export interface UpdateNoteInput {
   id: number;
   title?: string;
@@ -44,6 +50,7 @@ export interface UpdateNoteInput {
   id_project?: number;
   id_programming_language?: number;
 }
+
 export interface UpdateNoteScoreInput {
   id: number;
   user_id: number;

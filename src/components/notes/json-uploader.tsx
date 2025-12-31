@@ -5,7 +5,6 @@ export default function JsonUploader() {
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [jsonData, setJsonData] = useState<unknown | null>(null);
-  console.log("🚀 ~ JsonUploader ~ jsonData:", jsonData);
 
   const handleFileUpload = useCallback(
     (file: File) => {
@@ -53,9 +52,8 @@ export default function JsonUploader() {
 
   return (
     <div
-      className={`p-4 border rounded-lg shadow-md w-96 mx-auto ${
-        dragActive ? "border-blue-500" : ""
-      }`}
+      className={`p-4 border rounded-lg shadow-md w-96 mx-auto ${dragActive ? "border-blue-500" : ""
+        }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}>
