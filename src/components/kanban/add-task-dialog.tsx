@@ -1,5 +1,5 @@
 import { useCreateTask } from "@/application/mutations/use-create-task";
-import { useProjects } from "@/application/queries/use-projects";
+import { useUserProjects } from '@/application/queries/use-projects';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -58,7 +58,7 @@ export const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string>();
   const createTask = useCreateTask();
-  const { data: projects } = useProjects({ userId });
+  const { data: projects } = useUserProjects({ userId });
   const [projectsList, setProjectsList] = useState<Project[]>([]);
 
   useEffect(() => {
