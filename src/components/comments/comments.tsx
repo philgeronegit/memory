@@ -3,6 +3,7 @@
 import { useCreateComment } from "@/application/mutations/use-create-comment";
 import { useComments } from "@/application/queries/use-comments";
 import { useToast } from "@/hooks/use-toast";
+import { hasPermission } from '@/lib/auth';
 import useNotesStore from "@/store/useNotesStore";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
@@ -27,6 +28,14 @@ export default function Comments() {
   useEffect(() => {
     // commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [comments]);
+
+  useEffect(() => {
+    if (comment.length === 0) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [comment]);
 
   if (isLoading) {
     return <p>Chargement...</p>;
@@ -89,10 +98,14 @@ export default function Comments() {
         <div ref={commentsEndRef} />
       </div>
       <div className="flex flex-col gap-2">
-        <Input value={comment} onChange={handleCommentCHange} />
-        <Button disabled={isDisabled} onClick={handleAddComment}>
-          Ajouter un commentaire
-        </Button>
+        {hasPermission(roleUser, "create:comments") && (
+          <>
+            <Input value={comment} onChange={handleCommentCHange} />
+            <Button disabled={isDisabled} onClick={handleAddComment}>
+              Ajouter un commentaire
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
