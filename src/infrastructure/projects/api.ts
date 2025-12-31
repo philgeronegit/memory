@@ -1,5 +1,13 @@
 import { apiClient } from "../client";
 import { CreateProjectInput, ProjectDto, UpdateProjectInput } from "./dto";
+import {
+  AddUserToProjectInput,
+  DeleteUserFromProjectInput
+} from "./user-project-dto";
+
+async function addUserToProject(input: AddUserToProjectInput) {
+  await apiClient.post(`/user/${input.userId}/project/${input.projectId}`);
+}
 
 async function createProject(input: CreateProjectInput) {
   const response = await apiClient.post<ProjectDto>("/project", input);
@@ -18,6 +26,10 @@ async function deleteProject(id: number) {
   await apiClient.delete(`/project/${id}`);
 }
 
+async function deleteUserFromProject(input: DeleteUserFromProjectInput) {
+  await apiClient.delete(`/user/${input.userId}/project/${input.projectId}`);
+}
+
 async function getProject(id: number) {
   const response = await apiClient.get<ProjectDto>(`/project/${id}`);
   return response.data;
@@ -34,12 +46,14 @@ async function getUserProjects(userId?: number) {
 }
 
 const api = {
+  addUserToProject,
   createProject,
-  updateProject,
   deleteProject,
+  deleteUserFromProject,
   getProject,
   getProjects,
-  getUserProjects
+  getUserProjects,
+  updateProject
 };
 
 export default api;

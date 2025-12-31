@@ -1,3 +1,4 @@
+import { BaseUser } from "@/domain/user";
 import { Note } from "./note";
 
 export interface Project {
@@ -7,5 +8,9 @@ export interface Project {
   createdAt: string;
   updatedAt: string | null;
   archivedAt: string | null;
+  noteIds?: number[] | null;
   notes?: Note[] | null;
+  userIds?: number[] | null;
+  userNames?: string[] | null;
+  users?: BaseUser[] | null;
 }
