@@ -44,7 +44,7 @@ export function Uploads() {
           {uploads?.map((upload) => (
             <li
               key={upload.path}
-              className="cursor-pointer flex justify-between items-center hover:bg-slate-300 p-1 rounded">
+              className="cursor-pointer flex justify-between items-center hover:bg-slate-200 p-1 rounded-lg">
               <div
                 className="overflow-hidden text-ellipsis"
                 onClick={() => handleClick(upload)}>

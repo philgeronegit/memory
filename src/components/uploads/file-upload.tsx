@@ -29,7 +29,6 @@ export function FileUpload() {
 
     const formData = new FormData();
     formData.append("file", file);
-    console.log("Uploading file:", file.name);
 
     try {
       await apiClient.post("/upload/" + userId, formData, {
