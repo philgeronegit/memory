@@ -19,7 +19,6 @@ import { useMeasure } from "react-use";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
-import { YesNoDialog } from "../ui/yes-no-dialog";
 import { AddNoteDialog } from "./add-note-dialog";
 import { Node } from "./node";
 
@@ -28,7 +27,8 @@ import { SEARCH_VALUES } from "@/components/notes/search-select";
 export function Notes() {
   const { roleUser, setNoteContent, selectedNoteId, setSelectedNoteId } =
     useNotesStore();
-  const { projects, notes, isLoading, error } = useGetProjects();
+  const userId = roleUser?.id;
+  const { projects, notes, isLoading, error } = useGetProjects(userId);
   const { data: note } = useNote({
     noteId: selectedNoteId
   });
@@ -42,7 +42,6 @@ export function Notes() {
   const [ref, { width, height }] = useMeasure();
   const treeWidth = width - 10;
   const treeHeight = height;
-  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     isNote: boolean;
@@ -122,21 +121,7 @@ export function Notes() {
       } else {
         await deleteNote.mutateAsync(Number(deleteTarget.id));
       }
-      setDeleteDialogOpen(false);
       setDeleteTarget(null);
-    }
-  };
-
-  const onDelete = ({ ids }: { ids: string[] }) => {
-    if (!treeRef.current || !ids.length) {
-      return;
-    }
-
-    const id = ids[0];
-    const node = treeRef.current.get(id);
-    if (node) {
-      setDeleteTarget({ id, isNote: node.data.isNote });
-      setDeleteDialogOpen(true);
     }
   };
 
@@ -262,7 +247,6 @@ export function Notes() {
             searchMatch={handleSearchMatch}
             onSelect={onSelect}
             onRename={onRename}
-            onDelete={onDelete}
             onCreate={onCreate}
             onMove={onMove}>
             {Node}
@@ -270,11 +254,13 @@ export function Notes() {
         </div>
       </div>
       <div className="absolute bottom-2 ml-2 pb-4 flex gap-2">
-        <AddNoteDialog>
-          <Button size="icon" title="Ajouter une note">
-            <NotebookPen />
-          </Button>
-        </AddNoteDialog>
+        {hasPermission(roleUser, "create:notes") && (
+          <AddNoteDialog>
+            <Button size="icon" title="Ajouter une note">
+              <NotebookPen />
+            </Button>
+          </AddNoteDialog>
+        )}
         {hasPermission(roleUser, "create:projects") && (
           <AddProjectDialog>
             <Button size="icon" title="Ajouter un projet">
@@ -283,13 +269,6 @@ export function Notes() {
           </AddProjectDialog>
         )}
       </div>
-      <YesNoDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={handleDeleteConfirm}
-        title="Suppression"
-        message="Etês-vous sûr de vouloir supprimer cet élément ?"
-      />
     </div>
   );
 }
