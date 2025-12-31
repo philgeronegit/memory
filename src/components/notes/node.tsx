@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import useNotesStore from "@/store/useNotesStore";
-import { File, FolderClosed, FolderOpen, Pencil, Trash } from "lucide-react";
+import { File, FolderClosed, FolderOpen, Pencil } from "lucide-react";
 import { NodeRendererProps } from "react-arborist";
 import { NoteItem } from "./note-item";
 
@@ -51,9 +51,6 @@ export const Node = ({
       <div className="flex gap-1">
         <button onClick={() => node.edit()} title="Renommer">
           <Pencil size={12} />
-        </button>
-        <button onClick={() => tree.delete(node.id)} title="Supprimer">
-          <Trash size={12} />
         </button>
       </div>
     </div>

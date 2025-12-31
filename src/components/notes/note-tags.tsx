@@ -1,4 +1,6 @@
+import { useCreateTag } from "@/application/mutations/use-create-tag";
 import { useUpdateNoteTag } from "@/application/mutations/use-update-note-tag";
+import { useNote } from "@/application/queries/use-note";
 import { useNoteTags } from "@/application/queries/use-note-tags";
 import { useTags } from "@/application/queries/use-tags";
 import { useToast } from "@/hooks/use-toast";
@@ -8,13 +10,15 @@ import { MultiSelect } from "../multi-select/multi-select";
 
 export function NoteTags() {
   const { toast } = useToast();
-  const { selectedNoteId } = useNotesStore();
+  const { roleUser, selectedNoteId } = useNotesStore();
+  const { data: note } = useNote({ noteId: selectedNoteId });
   const {
     data: noteTags,
     isLoading: isLoadingTags,
     error: errorTags
   } = useNoteTags({ noteId: selectedNoteId });
   const { data: tags } = useTags();
+  const createTag = useCreateTag();
   const updateNoteTag = useUpdateNoteTag();
   const [selectedTags, setSelectedTags] = useState<string[]>();
   const tagsList =
@@ -22,6 +26,7 @@ export function NoteTags() {
       value: String(tag.id),
       label: tag.name
     })) ?? [];
+  const isCreatorOfNote = roleUser?.id === note?.idUser;
 
   useEffect(() => {
     if (!selectedNoteId) {
@@ -31,9 +36,29 @@ export function NoteTags() {
     setSelectedTags(selectedTags);
   }, [noteTags, selectedNoteId]);
 
-  const onValueChange = async (tags: string[]) => {
-    console.log("🚀 ~ onValueChange ~ tags:", tags);
+  const onCreateNewTag = async (name: string) => {
+    if (!selectedNoteId) {
+      toast({
+        title: "Erreur",
+        description: (
+          <p>Impossible de créer un nouveau tag sans note sélectionnée.</p>
+        )
+      });
+      return;
+    }
+    const tag = await createTag.mutateAsync({ name });
+    console.log("🚀 ~ onCreateNewTag ~ tag:", tag);
+    // await updateNoteTag.mutateAsync({
+    //   idNote: selectedNoteId,
+    //   tagIds: tags.map((tag) => Number(tag))
+    // });
+    // toast({
+    //   title: "Tag créé",
+    //   description: <p>Le tag "{name}" a été créé avec succès.</p>
+    // });
+  };
 
+  const onValueChange = async (tags: string[]) => {
     if (!selectedNoteId) {
       return;
     }
@@ -77,11 +102,13 @@ export function NoteTags() {
         <MultiSelect
           options={tagsList}
           onValueChange={onValueChange}
+          onCreateNew={onCreateNewTag}
           defaultValue={selectedTags}
           placeholder="Tags"
           variant="inverted"
           animation={2}
           maxCount={3}
+          disabled={!isCreatorOfNote}
         />
       </div>
     </div>
