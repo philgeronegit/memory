@@ -1,6 +1,7 @@
 import { apiClient } from "../client";
 import {
   CreateNoteInput,
+  NoteCountDto,
   NoteDto,
   UpdateNoteInput,
   UpdateNoteScoreInput
@@ -8,19 +9,6 @@ import {
 
 async function createNote(input: CreateNoteInput) {
   const response = await apiClient.post<NoteDto>("/note", input);
-  return response.data;
-}
-
-async function updateNote(input: UpdateNoteInput) {
-  const response = await apiClient.put<NoteDto>(`/note/${input.id}`, input);
-  return response.data;
-}
-
-async function updateNoteScore(input: UpdateNoteScoreInput) {
-  const response = await apiClient.put<NoteDto>(
-    `/note/${input.id}/score`,
-    input
-  );
   return response.data;
 }
 
@@ -45,12 +33,40 @@ async function getNotes() {
   return response.data;
 }
 
+async function getUserNotes(userId?: number) {
+  const url = `/user/${userId}/note`;
+  const response = await apiClient.get<NoteDto[]>(url);
+  return response.data;
+}
+
+async function getUserNotesCount(userId?: number) {
+  const url = `/user/${userId}/note?count=true`;
+  const response = await apiClient.get<NoteCountDto[]>(url);
+  console.log('🚀 ~ getUserNotesCount ~ response:', response);
+  return response.data;
+}
+
+async function updateNote(input: UpdateNoteInput) {
+  const response = await apiClient.put<NoteDto>(`/note/${input.id}`, input);
+  return response.data;
+}
+
+async function updateNoteScore(input: UpdateNoteScoreInput) {
+  const response = await apiClient.put<NoteDto>(
+    `/note/${input.id}/score`,
+    input
+  );
+  return response.data;
+}
+
 const api = {
   createNote,
   deleteNote,
   getNote,
   getNoteScore,
   getNotes,
+  getUserNotes,
+  getUserNotesCount,
   updateNote,
   updateNoteScore
 };
