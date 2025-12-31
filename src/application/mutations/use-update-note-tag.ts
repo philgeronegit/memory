@@ -8,6 +8,7 @@ export function useUpdateNoteTag() {
     mutationFn: (input: UpdateNoteTagInput) => TagService.updateNoteTag(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     }
   });
 }
