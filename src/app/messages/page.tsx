@@ -63,6 +63,7 @@ export default function Messages() {
               <TableHead className="w-[100px]">Utilisateur</TableHead>
               <TableHead>Texte</TableHead>
               <TableHead>Date création</TableHead>
+              <TableHead>Lu le</TableHead>
               <TableHead>Lu</TableHead>
             </TableRow>
           </TableHeader>
@@ -72,7 +73,10 @@ export default function Messages() {
                 <TableCell className="w-[100px]">{message.userId}</TableCell>
                 <TableCell>{message.text}</TableCell>
                 <TableCell>
-                  {message.createdAt.toLocaleDateString("fr-FR")}
+                  {message.createdAt.toLocaleDateString("fr-FR")} {message.createdAt.toLocaleTimeString("fr-FR")}
+                </TableCell>
+                <TableCell>
+                  {message.readAt ? `${message.readAt.toLocaleDateString("fr-FR")} ${message.readAt.toLocaleTimeString("fr-FR")}` : ""}
                 </TableCell>
                 <TableCell>
                   <Checkbox
