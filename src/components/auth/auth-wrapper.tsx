@@ -21,6 +21,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
 
     // Check if auth cookie exists and contains a valid token
     if (!authCookie || authCookies.isTokenExpired(authCookie)) {
+      console.warn("🚀 ~ AuthWrapper : Token expired or missing");
       setLoggedIn(false);
       authCookies.clearAllAuthCookies();
       return false;
@@ -28,6 +29,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
 
     // Check if user cookie exists
     if (!userCookie) {
+      console.warn("🚀 ~ AuthWrapper : User cookie missing");
       setLoggedIn(false);
       authCookies.clearAllAuthCookies();
       return false;
@@ -35,6 +37,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
 
     // If all checks pass, user is authenticated
     if (!isLoggedIn) {
+      console.log("🚀 ~ AuthWrapper : User authenticated");
       setLoggedIn(true, authCookie);
       setUser(userCookie as User);
     }
@@ -47,6 +50,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
     setIsCheckingAuth(false);
 
     if (!isAuthenticated) {
+      console.log("🚀 ~ AuthWrapper !isAuthenticated: Redirecting to login");
       router.push("/login");
     }
   }, [checkAuthentication, router]);
