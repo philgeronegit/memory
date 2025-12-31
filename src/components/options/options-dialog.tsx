@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   aiApiKey: HTMLInputElement;
@@ -25,6 +25,17 @@ interface OptionsDialogProps {
 
 export function OptionsDialog({ isOpen, onClose }: OptionsDialogProps) {
   const [replyError, setReplyError] = useState<string>();
+  const [apiKey, setApiKey] = useState<string>("");
+
+  // Load API key from localStorage when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      const storedKey = localStorage.getItem("aiApiKey");
+      if (storedKey) {
+        setApiKey(storedKey);
+      }
+    }
+  }, [isOpen]);
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
@@ -53,7 +64,13 @@ export function OptionsDialog({ isOpen, onClose }: OptionsDialogProps) {
               <Label htmlFor="aiApiKey" className="text-right">
                 AI API key
               </Label>
-              <Input id="aiApiKey" name="aiApiKey" className="col-span-3" />
+              <Input
+                id="aiApiKey"
+                name="aiApiKey"
+                className="col-span-3"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+              />
             </div>
           </div>
           <DialogFooter>

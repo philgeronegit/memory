@@ -4,7 +4,7 @@ import { useDeleteComment } from "@/application/mutations/use-delete-comment";
 import { useUpdateComment } from "@/application/mutations/use-update-comment";
 import { Comment as CommentType } from "@/domain/comment";
 import { useToast } from "@/hooks/use-toast";
-import { useSpellCheck } from "@/hooks/useSpellCheck";
+import { useSpellCheckOpenAI } from "@/hooks/useSpellCheck";
 import { hasPermission } from "@/lib/auth";
 import useNotesStore from "@/store/useNotesStore";
 import {
@@ -33,7 +33,7 @@ export default function Comment({ comment }: CommentProps) {
   const deleteComment = useDeleteComment();
   const { roleUser } = useNotesStore();
   const { response, loading, handleSpellCheck, setResponse, undo } =
-    useSpellCheck();
+    useSpellCheckOpenAI();
 
   const handleSpellCheckClick = async () => {
     await handleSpellCheck(inputValue);
