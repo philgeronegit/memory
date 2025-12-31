@@ -1,5 +1,6 @@
 const ROLES = {
   admin: [
+    "create:messages",
     "view:comments",
     "create:comments",
     "update:ownComments",
@@ -26,6 +27,7 @@ const ROLES = {
     "delete:tasks",
   ],
   developer: [
+    "create:messages",
     "view:comments",
     "create:comments",
     "update:ownComments",
@@ -43,6 +45,7 @@ const ROLES = {
     "delete:noteTags"
   ],
   leadDeveloper: [
+    "create:messages",
     "view:users",
     "view:comments",
     "create:comments",
@@ -53,6 +56,7 @@ const ROLES = {
     "delete:ownNotes"
   ],
   projectManager: [
+    "create:messages",
     "create:users",
     "view:users",
     "view:tasks",
