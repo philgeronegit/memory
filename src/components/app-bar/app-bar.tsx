@@ -34,17 +34,29 @@ interface CustomLinkProps {
   path: string;
 }
 
-const CustomLink = ({ label, pathname, path = "/" }: CustomLinkProps) => (
-  <Link
-    className={`${
-      pathname === path
-        ? "underline underline-offset-2 decoration-secondary decoration-4"
-        : ""
-    }`}
-    href={path}>
-    {label}
-  </Link>
-);
+const normalizePath = (p?: string) => {
+  if (!p) return "/";
+  if (p === "/") return "/";
+  return p.endsWith("/") ? p.slice(0, -1) : p;
+};
+
+const CustomLink = ({ label, pathname, path = "/" }: CustomLinkProps) => {
+  const normalizedPathname = normalizePath(pathname);
+  const normalizedPath = normalizePath(path);
+  const isActive = normalizedPathname === normalizedPath;
+
+  return (
+    <Link
+      className={
+        isActive
+          ? "underline underline-offset-2 decoration-secondary decoration-4"
+          : ""
+      }
+      href={path}>
+      {label}
+    </Link>
+  );
+};
 
 const links = [
   { label: "Home", path: "/" },
@@ -54,7 +66,8 @@ const links = [
   { label: "Uploads", path: "/uploads" },
   { label: "Kanban", path: "/kanban" },
   { label: "Utilisateurs", path: "/users" },
-  { label: "Projets", path: "/projects" }
+  { label: "Projets", path: "/projects" },
+  { label: "Tâches", path: "/tasks" }
 ];
 
 export const AppBar = () => {
@@ -88,6 +101,7 @@ export const AppBar = () => {
     } else if (itemName === "logout") {
       setSelectedNoteId(0);
       setLoggedIn(false);
+      router.push("/");
     }
   };
 
@@ -148,6 +162,13 @@ export const AppBar = () => {
               pathname={pathname}
               path={"/projects"}
               label="Projets"
+            />
+          )}
+          {isWide && hasPermission(roleUser, "view:tasks") && (
+            <CustomLink
+              pathname={pathname}
+              path={"/tasks"}
+              label="Tâches"
             />
           )}
         </div>
