@@ -17,6 +17,7 @@ import {
 import { FileUpload } from "@/components/uploads";
 import { BASE_URL } from "@/infrastructure/client";
 import useNotesStore from "@/store/useNotesStore";
+import { AxiosError } from 'axios';
 import { useState } from "react";
 
 export default function Uploads() {
@@ -40,7 +41,7 @@ export default function Uploads() {
   if (error) {
     return (
       <div className="p-2">
-        <p>Erreur: {error.message}</p>
+        <p>Erreur: {error instanceof AxiosError ? error.response?.statusText : "Une erreur est survenue."}</p>
       </div>
     );
   }
