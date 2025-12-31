@@ -18,6 +18,12 @@ export function useGetProjects(userId?: number) {
   const notesWithoutProject = notes.data
     ? notes.data.filter((note) => !note.projectId)
     : [];
+  const notesSharedWithUser = notes.data
+    ? notes.data.filter(
+      (note) => note.accessType === 'shared'
+    ).map(note => ({ ...note, title: note.title + ' (partagée)' }))
+    : [];
+  notesWithoutProject.push(...notesSharedWithUser);
   return {
     projects: projectsWithNotes,
     notes: notesWithoutProject,
