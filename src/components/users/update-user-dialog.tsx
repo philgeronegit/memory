@@ -1,14 +1,14 @@
 "use client";
 
-import { useCreateUser } from "@/application/mutations/use-create-user";
+import { useUpdateUser } from '@/application/mutations/use-update-user';
 import { useRoles } from "@/application/queries/use-roles";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -31,50 +31,63 @@ import { Switch } from "@/components/ui/switch";
 import { User } from "@/domain/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from 'axios';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "./user-form-schema";
+import { formUpdateSchema } from "./user-form-schema";
 
-interface CreateUserDialogProps {
+interface UpdateUserDialogProps {
   user?: User;
-  children: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function CreateUserDialog({ children, user }: CreateUserDialogProps) {
-  const [open, setOpen] = useState(false);
+export function UpdateUserDialog({ user, isOpen, onClose }: UpdateUserDialogProps) {
   const [replyError, setReplyError] = useState<string>();
-  const createUser = useCreateUser();
+  const updateUser = useUpdateUser();
   const { data: roles, isLoading } = useRoles();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof formUpdateSchema>>({
+    resolver: zodResolver(formUpdateSchema),
     defaultValues: {
-      username: user?.username ?? "",
-      password: "",
-      email: user?.email ?? "",
-      avatarUrl: user?.avatarUrl ?? "",
-      role: user?.roleValue ?? "",
-      isAdmin: user?.isAdmin ?? false
+      username: "",
+      email: "",
+      avatarUrl: "",
+      role: "0",
+      isAdmin: false
     }
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  useEffect(() => {
+    if (user && isOpen) {
+      form.reset({
+        username: user.username ?? "",
+        email: user.email ?? "",
+        avatarUrl: user.avatarUrl ?? "",
+        role: String(user.idRole) ?? "0",
+        isAdmin: Boolean(user.isAdmin) ?? false
+      });
+    }
+  }, [user, isOpen, form]);
+
+  async function onSubmit(data: z.infer<typeof formUpdateSchema>) {
+    if (!user) return;
+
     try {
-      await createUser.mutateAsync({
+      await updateUser.mutateAsync({
+        id: user.id,
         username: data.username,
-        password: data.password,
         email: data.email,
         avatar_url: data.avatarUrl,
         id_role: Number(data.role),
         is_admin: data.isAdmin
       });
-      setOpen(false);
+      onClose();
       form.reset();
     } catch (error) {
-      console.error("Erreur lors de la création de l'utilisateur:", error);
+      console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
       setReplyError(
-        "Une erreur est survenue lors de la création de l'utilisateur : " + (error instanceof AxiosError ? error.response?.statusText : String(error))
+        "Une erreur est survenue lors de la mise à jour de l'utilisateur : " + (error instanceof AxiosError ? error.response?.statusText : String(error))
       );
     }
   }
@@ -84,11 +97,13 @@ export function CreateUserDialog({ children, user }: CreateUserDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Créer un utilisateur</DialogTitle>
+          <DialogTitle>Modifier l&apos;utilisateur</DialogTitle>
+          <DialogDescription>
+            Veuillez modifier les informations de l&apos;utilisateur ci-dessous.
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col md:flex-row justify-center p-2 gap-4">
           <Form {...form}>
@@ -105,24 +120,6 @@ export function CreateUserDialog({ children, user }: CreateUserDialogProps) {
                     <FormDescription>
                       Ceci est le nom qui sera affiché dans les commentaires.
                     </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mot de passe</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Entrer votre mot de passe"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -161,13 +158,13 @@ export function CreateUserDialog({ children, user }: CreateUserDialogProps) {
                     <FormLabel>Role</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                      value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionner un role" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent defaultValue={field.value}>
+                      <SelectContent>
                         {roles &&
                           roles.map((role) => (
                             <SelectItem key={role.id} value={String(role.id)}>

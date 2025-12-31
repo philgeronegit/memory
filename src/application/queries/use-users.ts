@@ -11,3 +11,11 @@ export function useUsers() {
     queryFn: () => UsersService.getUsers()
   });
 }
+
+export function useProjectsUsers(projectId: number) {
+  return useQuery({
+    queryKey: ["projects", projectId, "users"],
+    queryFn: () => UsersService.getProjectUsers(projectId),
+    enabled: !!projectId
+  });
+}

@@ -1,6 +1,9 @@
-export interface User {
+export interface BaseUser {
   id: number;
   username: string;
+}
+
+export interface User extends BaseUser {
   email: string;
   avatarUrl: string;
   createdAt: Date;
