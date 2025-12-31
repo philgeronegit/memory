@@ -1,3 +1,5 @@
+"use client";
+
 import { useCreateProject } from "@/application/mutations/use-create-project";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,13 +10,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
+  description: HTMLInputElement;
+  users: HTMLInputElement;
 }
 
 interface ReplyForm extends HTMLFormElement {
@@ -34,6 +37,7 @@ export function AddProjectDialog({ children }: AddProjectDialogProps) {
     event.preventDefault();
 
     const name = event.currentTarget.elements.name.value;
+    const description = event.currentTarget.elements.description.value;
 
     const startDate = new Date().toISOString();
     const endDate = new Date();
@@ -42,7 +46,7 @@ export function AddProjectDialog({ children }: AddProjectDialogProps) {
     try {
       await createProject.mutateAsync({
         name,
-        description: "",
+        description,
         startDate,
         endDate: endDate.toISOString(),
         status
@@ -69,6 +73,16 @@ export function AddProjectDialog({ children }: AddProjectDialogProps) {
                 Nom
               </Label>
               <Input id="name" name="name" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="description"
+                name="description"
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>

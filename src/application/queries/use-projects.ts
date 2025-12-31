@@ -1,20 +1,25 @@
 import ProjectsService from "@/infrastructure/projects";
 import { useQuery } from "@tanstack/react-query";
 
-interface GetProjectsInput {
+interface GetUserProjectsInput {
   userId?: number;
 }
 
 export function getQueryKey(userId?: number) {
-  return userId ? ["projects", userId] : ["projects"];
+  return ["projects", userId];
 }
 
-export function useProjects({ userId }: GetProjectsInput = {}) {
+export function useProjects() {
+  return useQuery({
+    queryKey: getQueryKey(),
+    queryFn: () => ProjectsService.getProjects()
+  });
+}
+
+export function useUserProjects({ userId }: GetUserProjectsInput = {}) {
   return useQuery({
     queryKey: getQueryKey(userId),
-    queryFn: () =>
-      userId
-        ? ProjectsService.getUserProjects(userId)
-        : ProjectsService.getProjects()
+    queryFn: () => ProjectsService.getUserProjects(userId),
+    enabled: !!userId
   });
 }
