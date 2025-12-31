@@ -30,7 +30,7 @@ async function deleteUserFromProject(input: DeleteUserFromProjectInput) {
   await apiClient.delete(`/user/${input.userId}/project/${input.projectId}`);
 }
 
-async function getProject(id: number) {
+async function getProject(id?: number) {
   const response = await apiClient.get<ProjectDto>(`/project/${id}`);
   return response.data;
 }

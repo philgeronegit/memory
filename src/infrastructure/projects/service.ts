@@ -31,7 +31,7 @@ export class ProjectsService {
     await this.api.deleteUserFromProject(input);
   }
 
-  async getProject(id: number) {
+  async getProject(id?: number) {
     const project = await this.api.getProject(id);
     return dtoToProject(project);
   }

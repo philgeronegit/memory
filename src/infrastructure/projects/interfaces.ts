@@ -9,7 +9,7 @@ export interface ProjectsApi {
   createProject: (input: CreateProjectInput) => Promise<ProjectDto>;
   deleteProject: (id: number) => Promise<void>;
   deleteUserFromProject: (input: DeleteUserFromProjectInput) => Promise<void>;
-  getProject: (id: number) => Promise<ProjectDto>;
+  getProject: (id?: number) => Promise<ProjectDto>;
   getProjects: () => Promise<ProjectDto[]>;
   getUserProjects: (userId?: number) => Promise<ProjectDto[]>;
   updateProject: (input: UpdateProjectInput) => Promise<ProjectDto>;

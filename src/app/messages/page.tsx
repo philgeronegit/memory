@@ -3,6 +3,8 @@
 import { useUpdateMessageForUser } from '@/application/mutations/use-update-message-for-user';
 import { useUserMessages } from "@/application/queries/use-user-messages";
 import { AuthWrapper } from '@/components/auth';
+import { CreateMessageDialog } from '@/components/messages';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -13,11 +15,13 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Message } from '@/domain/message';
+import { hasPermission } from '@/lib/auth';
 import useNotesStore from "@/store/useNotesStore";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { UserPlus2 } from 'lucide-react';
 
 export default function Messages() {
-  const { user } = useNotesStore();
+  const { roleUser, user } = useNotesStore();
   const {
     data: messages,
     isLoading,
@@ -88,6 +92,14 @@ export default function Messages() {
             ))}
           </TableBody>
         </Table>
+
+        {hasPermission(roleUser, "create:messages") && (
+          <CreateMessageDialog>
+            <Button size="icon" title="Ajouter un utilisateur">
+              <UserPlus2 />
+            </Button>
+          </CreateMessageDialog>
+        )}
       </div>
     </AuthWrapper>
   );
