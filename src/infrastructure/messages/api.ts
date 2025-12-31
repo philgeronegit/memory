@@ -1,6 +1,14 @@
 import { apiClient } from "../client";
 import { MessageDto } from "./dto";
-import { UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
+import { CreateMessageInput, UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
+
+async function createMessage(input: CreateMessageInput) {
+  const response = await apiClient.post<MessageDto>("/message", {
+    text: input.text,
+    id_user: input.userId
+  });
+  return response.data;
+}
 
 async function getMessage(id: number) {
   const response = await apiClient.get<MessageDto>(`/message/${id}`);
@@ -33,6 +41,6 @@ async function updateMessageForUser(input: UpdateMessageForUserInput) {
   return response.data;
 }
 
-const api = { getMessage, getMessages, getUserMessages, updateMessage, updateMessageForUser };
+const api = { createMessage, getMessage, getMessages, getUserMessages, updateMessage, updateMessageForUser };
 
 export default api;

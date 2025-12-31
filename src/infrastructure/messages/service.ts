@@ -1,9 +1,14 @@
-import { MessagesApi, UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
+import { CreateMessageInput, MessagesApi, UpdateMessageForUserInput, UpdateMessageInput } from "./interfaces";
 import { dtoToMessage } from "./transform";
 
 export class MessagesService {
   constructor(private api: MessagesApi) {
     this.api = api;
+  }
+
+  async createMessage(input: CreateMessageInput) {
+    const message = await this.api.createMessage(input);
+    return dtoToMessage(message);
   }
 
   async getMessage(id: number) {

@@ -2,6 +2,7 @@ import { MessageDto } from "./dto";
 
 export interface CreateMessageInput {
   text: string;
+  userId: number;
 }
 
 export interface UpdateMessageInput {
@@ -16,6 +17,7 @@ export interface UpdateMessageForUserInput {
 }
 
 export interface MessagesApi {
+  createMessage: (input: CreateMessageInput) => Promise<MessageDto>;
   getMessage: (id: number) => Promise<MessageDto>;
   getMessages: () => Promise<MessageDto[]>;
   getUserMessages: (userId: number) => Promise<MessageDto[]>;
