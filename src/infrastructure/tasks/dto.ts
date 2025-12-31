@@ -5,13 +5,17 @@ export interface TaskDto {
   created_at: string;
   updated_at: string;
   archived_at: string;
+  id_status: number;
   status: string;
   due_at: string;
   done_at: string;
   priority: string;
   id_project: number;
+  project_name: string;
   id_executive: number;
+  executive_name: string;
   id_developer: number;
+  developer_name: string;
   task_order: number;
 }
 
