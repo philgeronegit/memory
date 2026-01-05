@@ -1,4 +1,7 @@
 export interface Upload {
   name: string;
-  path: string;
+  size: number;
+  type: string;
+  url: string;
+  modified: string;
 }

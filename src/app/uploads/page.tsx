@@ -55,39 +55,41 @@ export default function Uploads() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Nom</TableHead>
-              <TableHead>Chemin</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Thumbnail</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {uploads?.map((upload) => (
-              <TableRow key={upload.path}>
+              <TableRow key={upload.url}>
                 <TableCell className="w-[100px]">{upload.name}</TableCell>
-                <TableCell>{upload.path}</TableCell>
+                <TableCell>{upload.size} bytes</TableCell>
+                <TableCell>{upload.type}</TableCell>
                 <TableCell>
                   <Popover
-                    open={openPopover === upload.path}
+                    open={openPopover === upload.url}
                     onOpenChange={(open) =>
-                      setOpenPopover(open ? upload.path : null)
+                      setOpenPopover(open ? upload.url : null)
                     }>
                     <PopoverTrigger asChild>
                       <img
-                        src={`${BASE_URL}/${upload.path}`}
+                        src={`${BASE_URL}/${upload.url}`}
                         alt={upload.name}
                         width={64}
                         height={64}
                         className="ml-2 inline-block rounded shadow hover:ring-2 hover:ring-primary transition"
-                        onMouseEnter={() => setOpenPopover(upload.path)}
+                        onMouseEnter={() => setOpenPopover(upload.url)}
                         onMouseLeave={() => setOpenPopover(null)}
                       />
                     </PopoverTrigger>
                     <PopoverContent
                       align="center"
                       className="flex items-center justify-center w-auto h-auto bg-white p-2"
-                      onMouseEnter={() => setOpenPopover(upload.path)}
+                      onMouseEnter={() => setOpenPopover(upload.url)}
                       onMouseLeave={() => setOpenPopover(null)}>
                       <img
-                        src={`${BASE_URL}/${upload.path}`}
+                        src={`${BASE_URL}/${upload.url}`}
                         alt={upload.name}
                         width={256}
                         height={256}
