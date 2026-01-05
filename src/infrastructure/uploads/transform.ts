@@ -4,6 +4,9 @@ import { UploadDto } from "./dto";
 export function dtoToUpload(dto: UploadDto): Upload {
   return {
     name: dto.name,
-    path: dto.path
+    size: dto.size,
+    type: dto.type,
+    url: dto.url,
+    modified: dto.modified,
   };
 }
