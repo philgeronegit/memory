@@ -2,12 +2,14 @@ import { TagDto } from "./dto";
 import {
   CreateNoteTagInput,
   CreateTagInput,
-  DeleteNoteTagInput
+  DeleteNoteTagInput,
+  UpdateNoteTagInput
 } from "./service";
 
 export interface TagsApi {
   createTag: (input: CreateTagInput) => Promise<TagDto>;
   createNoteTag: (input: CreateNoteTagInput) => Promise<TagDto>;
+  updateNoteTag: (input: UpdateNoteTagInput) => Promise<TagDto>;
   deleteTag: (id: number) => Promise<void>;
   deleteNoteTag: (input: DeleteNoteTagInput) => Promise<void>;
   updateTag: (id: number, input: CreateTagInput) => Promise<TagDto>;

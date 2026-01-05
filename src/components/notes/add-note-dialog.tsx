@@ -1,5 +1,6 @@
 import { useCreateNote } from "@/application/mutations/use-create-note";
-import { useProjects } from "@/application/queries/use-projects";
+import { useProgrammingLanguages } from "@/application/queries/use-programming-languages";
+import { useUserProjects } from "@/application/queries/use-projects";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { Textarea } from '@/components/ui/textarea';
+import useNotesStore from "@/store/useNotesStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,7 +40,8 @@ const formSchema = z.object({
   }),
   content: z.string(),
   isPublic: z.boolean().default(false),
-  projectId: z.string()
+  projectId: z.string().optional(),
+  programmingLanguageId: z.string().optional()
 });
 
 interface AddNoteDialogProps {
@@ -45,26 +49,39 @@ interface AddNoteDialogProps {
 }
 
 export function AddNoteDialog({ children }: AddNoteDialogProps) {
+  const { roleUser } = useNotesStore();
+  const userId = roleUser?.id;
   const [open, setOpen] = useState(false);
   const [replyError, setReplyError] = useState<string>();
   const createNote = useCreateNote();
-  const { data: projects } = useProjects();
+  const { data: programmingLanguages } = useProgrammingLanguages();
+  const { data: projects } = useUserProjects({ userId });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await createNote.mutateAsync({
-      title: data.title,
-      content: data.content,
-      type: "text",
-      is_public: data.isPublic,
-      id_programming_language: 1,
-      id_project: Number(data.projectId),
-      id_user: 1
-    });
-    setOpen(false);
+    if (!userId) {
+      setReplyError("Utilisateur non trouvé.");
+      return;
+    }
+
+    try {
+      await createNote.mutateAsync({
+        title: data.title,
+        content: data.content,
+        type: "text",
+        is_public: data.isPublic,
+        id_project: Number(data.projectId),
+        id_programming_language: Number(data.programmingLanguageId),
+        id_user: userId
+      });
+      setOpen(false);
+    } catch (error) {
+      console.error("Error creating note:", error);
+      setReplyError("Une erreur est survenue lors de la création de la note.");
+    }
   }
 
   return (
@@ -96,7 +113,7 @@ export function AddNoteDialog({ children }: AddNoteDialogProps) {
                 <FormItem>
                   <FormLabel>Contenu</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,6 +140,35 @@ export function AddNoteDialog({ children }: AddNoteDialogProps) {
                             key={project.id}
                             value={String(project.id)}>
                             {project.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="programmingLanguageId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Langage de programmation</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sélectionner un langage" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent defaultValue={field.value}>
+                      {programmingLanguages &&
+                        programmingLanguages.map((language) => (
+                          <SelectItem
+                            key={language.id}
+                            value={String(language.id)}>
+                            {language.name}
                           </SelectItem>
                         ))}
                     </SelectContent>

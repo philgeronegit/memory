@@ -1,4 +1,4 @@
-import { Task } from "@/domain";
+import { Task } from "@/domain/task";
 import { TaskDto } from "./dto";
 
 export function dtoToTask(dto: TaskDto): Task {
@@ -9,12 +9,17 @@ export function dtoToTask(dto: TaskDto): Task {
     createdAt: dto.created_at,
     updatedAt: dto.updated_at,
     archivedAt: dto.archived_at,
+    idStatus: dto.id_status,
     status: dto.status,
     dueAt: dto.due_at,
     doneAt: dto.done_at,
     priority: dto.priority,
     idProject: dto.id_project,
+    projectName: dto.project_name,
     idExecutive: dto.id_executive,
-    idDeveloper: dto.id_developer
+    executiveName: dto.executive_name,
+    idDeveloper: dto.id_developer,
+    developerName: dto.developer_name,
+    order: dto.task_order
   };
 }

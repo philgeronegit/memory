@@ -1,5 +1,6 @@
 export interface Note {
   id: number;
+  idUser: number;
   title: string;
   content: string;
   type: string;
@@ -8,6 +9,16 @@ export interface Note {
   updatedAt?: string;
   archivedAt?: string;
   projectId?: number;
+  projectName?: string;
+  username: string;
+  email: string;
+  tags: string[];
+  totalLikes?: number;
+  totalDislikes?: number;
+  score?: number;
+  accessType?: string;
+  programmingLanguage?: string;
+  programmingLanguageId?: number;
 }
 
 export function getNoteById(notes?: Note[], noteId?: number) {

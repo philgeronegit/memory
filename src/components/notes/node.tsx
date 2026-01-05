@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
-import { File, FolderClosed, FolderOpen, Pencil, Trash } from "lucide-react";
+import useNotesStore from "@/store/useNotesStore";
+import { File, FolderClosed, FolderOpen, Pencil } from "lucide-react";
 import { NodeRendererProps } from "react-arborist";
-import { NoteItem } from "./note";
+import { NoteItem } from "./note-item";
 
 export const Node = ({
   node,
@@ -9,24 +10,27 @@ export const Node = ({
   dragHandle,
   tree
 }: NodeRendererProps<NoteItem>) => {
+  const { selectedNoteId } = useNotesStore();
+  const isSelected = selectedNoteId === Number(node.id);
+
   return (
     <div
       style={style}
       ref={dragHandle}
       className={cn("flex flex-row justify-between items-center", {
-        "bg-slate-200": node.state.isSelected
+        "bg-slate-200 rounded-lg": node.state.isSelected || isSelected
       })}>
       <div
-        className={cn("flex flex-row gap-2")}
+        className={cn("flex flex-row gap-2 overflow-hidden")}
         onClick={() => node.isInternal && node.toggle()}>
         {node.data.isNote ? (
-          <File />
+          <File className="flex-shrink-0" />
         ) : node.isOpen ? (
-          <FolderOpen />
+          <FolderOpen className="flex-shrink-0" />
         ) : (
-          <FolderClosed />
+          <FolderClosed className="flex-shrink-0" />
         )}
-        <span className="">
+        <div className="overflow-hidden">
           {node.isEditing ? (
             <input
               type="text"
@@ -40,16 +44,13 @@ export const Node = ({
               autoFocus
             />
           ) : (
-            <span>{node.data.name}</span>
+            <div className="truncate">{node.data.name}</div>
           )}
-        </span>
+        </div>
       </div>
       <div className="flex gap-1">
         <button onClick={() => node.edit()} title="Renommer">
           <Pencil size={12} />
-        </button>
-        <button onClick={() => tree.delete(node.id)} title="Supprimer">
-          <Trash size={12} />
         </button>
       </div>
     </div>

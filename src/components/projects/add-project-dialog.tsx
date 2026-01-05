@@ -1,3 +1,6 @@
+"use client";
+
+import { useCreateProject } from "@/application/mutations/use-create-project";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,13 +10,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
+  description: HTMLInputElement;
+  users: HTMLInputElement;
 }
 
 interface ReplyForm extends HTMLFormElement {
@@ -27,29 +31,32 @@ interface AddProjectDialogProps {
 export function AddProjectDialog({ children }: AddProjectDialogProps) {
   const [open, setOpen] = useState(false);
   const [replyError, setReplyError] = useState<string>();
-  // const createProject = useCreateProject();
+  const createProject = useCreateProject();
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
 
-    const title = event.currentTarget.elements.name.value;
-    const content = "";
+    const name = event.currentTarget.elements.name.value;
+    const description = event.currentTarget.elements.description.value;
 
-    // const result = await createProject.mutateAsync({
-    //   title,
-    //   content,
-    //   type: "text",
-    //   is_public: true,
-    //   id_programming_language: 1,
-    //   id_project: 3,
-    //   id_user: 1
-    // });
+    const startDate = new Date().toISOString();
+    const endDate = new Date();
+    endDate.setFullYear(endDate.getFullYear() + 1);
+    const status = "active";
+    try {
+      await createProject.mutateAsync({
+        name,
+        description,
+        startDate,
+        endDate: endDate.toISOString(),
+        status
+      });
 
-    // if (result.error) {
-    //   setReplyError(result.error);
-    // } else {
-    //   setOpen(false);
-    // }
+      setOpen(false);
+    } catch (error) {
+      console.error("Error creating project:", error);
+      setReplyError("Une erreur est survenue lors de la création du projet.");
+    }
   }
 
   return (
@@ -66,6 +73,16 @@ export function AddProjectDialog({ children }: AddProjectDialogProps) {
                 Nom
               </Label>
               <Input id="name" name="name" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="description"
+                name="description"
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>

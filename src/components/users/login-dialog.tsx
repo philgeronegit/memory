@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
@@ -25,15 +27,18 @@ interface LoginDialogProps {
 }
 
 export function LoginDialog({ open, setOpen }: LoginDialogProps) {
-  const [replyError, setReplyError] = useState<string>();
+  const { handleLogin, replyError } = useAuth();
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
 
     const username = event.currentTarget.elements.username.value;
     const password = event.currentTarget.elements.password.value;
-    console.log("🚀 ~ handleSubmit ~ username:", username, password);
-    setOpen(false);
+
+    const result = await handleLogin(username, password);
+    if (result.success) {
+      setOpen(false);
+    }
   }
 
   return (
@@ -48,21 +53,27 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
               <Label htmlFor="username" className="text-right">
                 Utilisateur
               </Label>
-              <Input id="username" name="username" className="col-span-3" />
+              <Input id="username" name="username" className="col-span-3" autoComplete="off" />
               <Label htmlFor="password" className="text-right">
                 Mot de passe
               </Label>
-              <Input id="password" name="password" className="col-span-3" />
+              <Input
+                id="password"
+                name="password"
+                className="col-span-3"
+                type="password"
+                autoComplete="off"
+              />
             </div>
+            {replyError && (
+              <div className="text-red-500 text-sm font-bold text-center mt-4">
+                {replyError}
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button>Login</Button>
           </DialogFooter>
-          {replyError && (
-            <div className="text-red-500 text-sm font-bold text-center mt-4">
-              {replyError}
-            </div>
-          )}
         </form>
       </DialogContent>
     </Dialog>

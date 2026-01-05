@@ -3,8 +3,8 @@ import { useState } from "react";
 const EditableDiv = () => {
   const [content, setContent] = useState("Editer ce texte...");
 
-  const handleInput = (e) => {
-    setContent(e.target.innerText);
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+    setContent((e.target as HTMLDivElement).innerText);
   };
 
   return (

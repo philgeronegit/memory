@@ -3,5 +3,7 @@ export type NoteItem = {
   name: string;
   isNote: boolean;
   projectId?: number;
+  projectName?: string;
+  tags?: string[];
   children?: NoteItem[];
 };

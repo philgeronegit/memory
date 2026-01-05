@@ -1,5 +1,5 @@
 import CommentService from "@/infrastructure/comments";
-import { UpdateCommentInput } from "@/infrastructure/comments/dto";
+import { UpdateCommentInput } from "@/infrastructure/comments/interfaces";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUpdateComment() {

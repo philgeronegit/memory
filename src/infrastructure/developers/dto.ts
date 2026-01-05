@@ -3,10 +3,13 @@ export interface DeveloperDto {
   username: string;
   email: string;
   avatar_url: string;
-  created_at: string;
+  created_at: Date;
   is_admin: boolean;
   id_role: number;
-  role: string;
+  role_name: string;
+  role_value: string;
+  access_token: string;
+  expires_in: number;
 }
 
 export interface CreateDeveloperInput {

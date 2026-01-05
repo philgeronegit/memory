@@ -7,6 +7,7 @@ import { Role } from "./role";
 import { Tag } from "./tag";
 import { Task } from "./task";
 import { TechnicalSkill } from "./technical-skill";
+import { User } from "./user";
 
 export type {
   Comment,
@@ -17,5 +18,6 @@ export type {
   Role,
   Tag,
   Task,
-  TechnicalSkill
+  TechnicalSkill,
+  User
 };

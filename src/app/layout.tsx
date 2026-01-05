@@ -27,9 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} list-inside list-disc`}>
+      <body className="antialiased flex flex-col h-[96vh]">
         <Providers>
           <AppBar />
           {children}
