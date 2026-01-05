@@ -25,7 +25,7 @@ export function Uploads() {
   const { toast } = useToast();
 
   const handleClick = (upload: Upload) => {
-    const fullPath = `![${upload.name}](${BASE_URL}/${upload.path})`;
+    const fullPath = `![${upload.name}](${BASE_URL}/${upload.url})`;
     navigator.clipboard.writeText(fullPath).then(() => {
       toast({
         title: "URL copiée",
@@ -43,7 +43,7 @@ export function Uploads() {
         <ul>
           {uploads?.map((upload) => (
             <li
-              key={upload.path}
+              key={upload.url}
               className="cursor-pointer flex justify-between items-center hover:bg-slate-200 p-1 rounded-lg">
               <div
                 className="overflow-hidden text-ellipsis"
@@ -52,28 +52,28 @@ export function Uploads() {
               </div>
               <div>
                 <Popover
-                  open={openPopover === upload.path}
+                  open={openPopover === upload.url}
                   onOpenChange={(open) =>
-                    setOpenPopover(open ? upload.path : null)
+                    setOpenPopover(open ? upload.url : null)
                   }>
                   <PopoverTrigger asChild>
                     <img
-                      src={`${BASE_URL}/${upload.path}`}
+                      src={`${BASE_URL}/${upload.url}`}
                       alt={upload.name}
                       width={64}
                       height={64}
                       className="ml-2 inline-block rounded shadow hover:ring-2 hover:ring-primary transition"
-                      onMouseEnter={() => setOpenPopover(upload.path)}
+                      onMouseEnter={() => setOpenPopover(upload.url)}
                       onMouseLeave={() => setOpenPopover(null)}
                     />
                   </PopoverTrigger>
                   <PopoverContent
                     align="center"
                     className="flex items-center justify-center w-auto h-auto bg-white p-2"
-                    onMouseEnter={() => setOpenPopover(upload.path)}
+                    onMouseEnter={() => setOpenPopover(upload.url)}
                     onMouseLeave={() => setOpenPopover(null)}>
                     <img
-                      src={`${BASE_URL}/${upload.path}`}
+                      src={`${BASE_URL}/${upload.url}`}
                       alt={upload.name}
                       width={256}
                       height={256}
