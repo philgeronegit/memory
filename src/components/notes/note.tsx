@@ -281,6 +281,13 @@ export function Note() {
           </SelectContent>
         </Select>
       </div>
+      {
+        note.accessType === "shared" && (
+          <div className="m-1 p-2 bg-yellow-100 border border-yellow-300 rounded">
+            Cette note fait partie d'un projet partagé.
+          </div>
+        )
+      }
       <div className="m-1">{`Créé le ${new Date(
         note.createdAt
       ).toLocaleDateString("fr-FR")} par ${note.username}`}</div>

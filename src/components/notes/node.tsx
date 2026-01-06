@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import useNotesStore from "@/store/useNotesStore";
-import { File, FolderClosed, FolderOpen, Pencil } from "lucide-react";
+import { File, FileKey, FolderClosed, FolderLock, FolderOpen, FolderOpenDot, Pencil } from "lucide-react";
 import { NodeRendererProps } from "react-arborist";
 import { NoteItem } from "./note-item";
 
@@ -13,6 +13,26 @@ export const Node = ({
   const { selectedNoteId } = useNotesStore();
   const isSelected = selectedNoteId === Number(node.id);
 
+  let noteComponent = <File className="flex-shrink-0" />;
+  if (node.data.isNote && !node.data.isPublic) {
+    noteComponent = <FileKey className="flex-shrink-0" />;
+  }
+  if (node.data.isNote === false) {
+    if (node.data.isShared) {
+      noteComponent = node.isOpen ? (
+        <FolderOpenDot className="flex-shrink-0" />
+      ) : (
+        <FolderLock className="flex-shrink-0" />
+      );
+    } else {
+      noteComponent = node.isOpen ? (
+        <FolderOpen className="flex-shrink-0" />
+      ) : (
+        <FolderClosed className="flex-shrink-0" />
+      );
+    }
+  }
+
   return (
     <div
       style={style}
@@ -23,13 +43,7 @@ export const Node = ({
       <div
         className={cn("flex flex-row gap-2 overflow-hidden")}
         onClick={() => node.isInternal && node.toggle()}>
-        {node.data.isNote ? (
-          <File className="flex-shrink-0" />
-        ) : node.isOpen ? (
-          <FolderOpen className="flex-shrink-0" />
-        ) : (
-          <FolderClosed className="flex-shrink-0" />
-        )}
+        {noteComponent}
         <div className="overflow-hidden">
           {node.isEditing ? (
             <input
