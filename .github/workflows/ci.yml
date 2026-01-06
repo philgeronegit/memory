@@ -2,37 +2,28 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [ main ]
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main ]
 
 jobs:
   lint-and-test:
     name: Lint and Test
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run linter
+      - name: Run lint
         run: npm run lint
 
       - name: Run tests
