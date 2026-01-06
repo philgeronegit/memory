@@ -72,6 +72,7 @@ export function Notes() {
         id: String(project.id),
         name: project.name,
         isNote: false, // Add isNote property for projects
+        isPublic: false, // Add isPublic property for projects
         isShared: project.isShared,
         children: project.notes?.map((note: Note) => {
           return {
