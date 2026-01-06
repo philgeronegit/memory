@@ -2,6 +2,7 @@ export interface ProjectDto {
   id_project: number;
   name: string;
   description: string;
+  access_type: string;
   created_at: string;
   updated_at: string | null;
   archived_at: string | null;
