@@ -9,9 +9,12 @@ const usersApiMock = {
     email: "john.doe@gmail.com",
     avatar_url: null,
     created_at: "2025-04-09 14:33:50",
+    is_admin: false,
     id_role: 6,
     role_name: "Admin",
-    role_value: "admin"
+    role_value: "admin",
+    access_token: "someaccesstoken",
+    expires_in: 3600
   }),
   createUser: vitest.fn().mockResolvedValue({
     id_user: 4,
@@ -173,10 +176,12 @@ describe("UsersService", () => {
       email: "john.doe@gmail.com",
       avatarUrl: null,
       createdAt: "2025-04-09 14:33:50",
-      isAdmin: undefined,
+      isAdmin: false,
       idRole: 6,
       roleName: "Admin",
-      roleValue: "admin"
+      roleValue: "admin",
+      access_token: "someaccesstoken",
+      expires_in: 3600
     });
   });
   it("should throw an error if login fails", async () => {
