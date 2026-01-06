@@ -8,6 +8,7 @@ export function useGetProjects(userId?: number) {
     ? projects.data.map((project) => {
       return {
         ...project,
+        isShared: project.accessType === 'shared',
         id: String("P" + project.id), // to avoid conflict with note IDs
         notes: notes.data
           ? notes.data.filter((note) => note.projectId === project.id)
@@ -18,12 +19,7 @@ export function useGetProjects(userId?: number) {
   const notesWithoutProject = notes.data
     ? notes.data.filter((note) => !note.projectId)
     : [];
-  const notesSharedWithUser = notes.data
-    ? notes.data.filter(
-      (note) => note.accessType === 'shared'
-    ).map(note => ({ ...note, title: note.title + ' (partagée)' }))
-    : [];
-  notesWithoutProject.push(...notesSharedWithUser);
+
   return {
     projects: projectsWithNotes,
     notes: notesWithoutProject,
