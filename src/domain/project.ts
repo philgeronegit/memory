@@ -5,6 +5,7 @@ export interface Project {
   id: number;
   name: string;
   description: string;
+  accessType: string;
   createdAt: string;
   updatedAt: string | null;
   archivedAt: string | null;

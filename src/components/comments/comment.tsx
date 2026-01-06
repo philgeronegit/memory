@@ -182,14 +182,18 @@ export default function Comment({ comment }: CommentProps) {
             <ThumbsDown />
             {comment.totalDislikes}
           </Button>
-          <Button
-            disabled={loading}
-            variant="ghost"
-            size="sm"
-            title="Spell checker"
-            onClick={handleSpellCheckClick}>
-            <BookCheck />
-          </Button>
+          {roleUser &&
+            hasPermission(roleUser, "update:ownComments") &&
+            roleUser.id === comment.userId && (
+              <Button
+                disabled={loading}
+                variant="ghost"
+                size="sm"
+                title="Spell checker"
+                onClick={handleSpellCheckClick}>
+                <BookCheck />
+              </Button>
+            )}
           {roleUser &&
             hasPermission(roleUser, "delete:ownComments") &&
             roleUser.id === comment.userId && (

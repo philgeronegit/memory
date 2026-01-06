@@ -59,6 +59,8 @@ export function Notes() {
         id: String(note.id),
         name: note.title,
         isNote: true,
+        isPublic: note.isPublic,
+        isShared: note.accessType === 'shared',
         projectId: null,
         tags: note.tags,
         children: []
@@ -70,11 +72,14 @@ export function Notes() {
         id: String(project.id),
         name: project.name,
         isNote: false, // Add isNote property for projects
+        isShared: project.isShared,
         children: project.notes?.map((note: Note) => {
           return {
             id: String(note.id),
             name: note.title,
             isNote: true,
+            isPublic: note.isPublic,
+            isShared: note.accessType === 'shared',
             projectId: note.projectId,
             projectName: note.projectName,
             tags: note.tags,
@@ -175,8 +180,8 @@ export function Notes() {
       case SEARCH_VALUES.TAG.value:
         return Array.isArray(node.data.tags)
           ? node.data.tags.some((tag) =>
-              tag.toLowerCase().includes(term.toLowerCase())
-            )
+            tag.toLowerCase().includes(term.toLowerCase())
+          )
           : false;
       case SEARCH_VALUES.PROJECT.value:
         return typeof node.data.projectName === "string"

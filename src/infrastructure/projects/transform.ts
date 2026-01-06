@@ -7,6 +7,7 @@ export function dtoToProject(dto: ProjectDto): Project {
     id: dto.id_project,
     name: dto.name,
     description: dto.description,
+    accessType: dto.access_type,
     createdAt: dto.created_at,
     updatedAt: dto.updated_at ?? null,
     archivedAt: dto.archived_at ?? null,
