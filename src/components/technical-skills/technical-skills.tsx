@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TechnicalSkill } from "@/domain/technical-skill";
+import { hasPermission } from '@/lib/auth';
 import useNotesStore from "@/store/useNotesStore";
 import { Check, Edit2, Plus, Trash2, X } from "lucide-react";
 import React from "react";
@@ -153,78 +154,80 @@ export function TechnicalSkills() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Add new skill section */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium">Ajouter une compétence</h4>
-            <div className="flex gap-2">
-              <Button
-                variant={!isCreatingNew ? "default" : "outline"}
-                size="sm"
-                onClick={() => setIsCreatingNew(false)}
-              >
-                Choisir existante
-              </Button>
-              <Button
-                variant={isCreatingNew ? "default" : "outline"}
-                size="sm"
-                onClick={() => setIsCreatingNew(true)}
-              >
-                Créer nouvelle
-              </Button>
-            </div>
-
-            <div className="grid gap-3">
-              {isCreatingNew ? (
-                <Input
-                  placeholder="Nom de la compétence"
-                  value={newSkillName}
-                  onChange={(e) => setNewSkillName(e.target.value)}
-                />
-              ) : (
-                <Select value={selectedSkillName} onValueChange={setSelectedSkillName}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionner une compétence" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableSkills.length === 0 ? (
-                      <SelectItem value="none" disabled>
-                        Aucune compétence disponible
-                      </SelectItem>
-                    ) : (
-                      availableSkills.map((skill) => (
-                        <SelectItem key={skill.id} value={skill.name}>
-                          {skill.name}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-              )}
-
+          {hasPermission(roleUser, "create:technicalSkills") && (
+            <div className="space-y-4">
+              <h4 className="text-sm font-medium">Ajouter une compétence</h4>
               <div className="flex gap-2">
-                <Input
-                  type="number"
-                  min="0"
-                  max="50"
-                  placeholder="Années d'expérience"
-                  value={yearOfExperience}
-                  onChange={(e) => setYearOfExperience(e.target.value)}
-                  className="w-32"
-                />
                 <Button
-                  onClick={handleAddSkill}
-                  disabled={
-                    createSkill.isPending ||
-                    (!isCreatingNew && !selectedSkillName) ||
-                    (isCreatingNew && !newSkillName.trim())
-                  }
+                  variant={!isCreatingNew ? "default" : "outline"}
                   size="sm"
+                  onClick={() => setIsCreatingNew(false)}
                 >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Ajouter
+                  Choisir existante
+                </Button>
+                <Button
+                  variant={isCreatingNew ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setIsCreatingNew(true)}
+                >
+                  Créer nouvelle
                 </Button>
               </div>
+
+              <div className="grid gap-3">
+                {isCreatingNew ? (
+                  <Input
+                    placeholder="Nom de la compétence"
+                    value={newSkillName}
+                    onChange={(e) => setNewSkillName(e.target.value)}
+                  />
+                ) : (
+                  <Select value={selectedSkillName} onValueChange={setSelectedSkillName}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sélectionner une compétence" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableSkills.length === 0 ? (
+                        <SelectItem value="none" disabled>
+                          Aucune compétence disponible
+                        </SelectItem>
+                      ) : (
+                        availableSkills.map((skill) => (
+                          <SelectItem key={skill.id} value={skill.name}>
+                            {skill.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
+
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    min="0"
+                    max="50"
+                    placeholder="Années d'expérience"
+                    value={yearOfExperience}
+                    onChange={(e) => setYearOfExperience(e.target.value)}
+                    className="w-32"
+                  />
+                  <Button
+                    onClick={handleAddSkill}
+                    disabled={
+                      createSkill.isPending ||
+                      (!isCreatingNew && !selectedSkillName) ||
+                      (isCreatingNew && !newSkillName.trim())
+                    }
+                    size="sm"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Ajouter
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Skills list */}
           <div className="space-y-3">
@@ -285,23 +288,27 @@ export function TechnicalSkills() {
                           </>
                         ) : (
                           <>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8"
-                              onClick={() => startEditing(skill)}
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8"
-                              onClick={() => handleDeleteSkill(skill.id)}
-                              disabled={deleteSkillFromUser.isPending}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
+                            {hasPermission(roleUser, "update:technicalSkills") && (
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8"
+                                onClick={() => startEditing(skill)}
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {hasPermission(roleUser, "delete:technicalSkills") && (
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8"
+                                onClick={() => handleDeleteSkill(skill.id)}
+                                disabled={deleteSkillFromUser.isPending}
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            )}
                           </>
                         )}
                       </div>

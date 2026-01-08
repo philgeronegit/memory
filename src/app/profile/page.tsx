@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
+import { hasPermission } from '@/lib/auth';
 import useNotesStore from "@/store/useNotesStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -48,7 +49,7 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const { data: roles, isLoading } = useRoles();
   const updateDeveloper = useUpdateDeveloper();
-  const { user } = useNotesStore();
+  const { roleUser, user } = useNotesStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -193,7 +194,9 @@ export default function ProfileForm() {
           </form>
         </Form>
 
-        <TechnicalSkills />
+        {hasPermission(roleUser, "view:technicalSkills") && (
+          <TechnicalSkills />
+        )}
       </div>
     </AuthWrapper>
   );
