@@ -42,7 +42,11 @@ const ROLES = {
     "view:noteTags",
     "create:noteTags",
     "update:noteTags",
-    "delete:noteTags"
+    "delete:noteTags",
+    "view:technicalSkills",
+    "create:technicalSkills",
+    "update:technicalSkills",
+    "delete:technicalSkills"
   ],
   leadDeveloper: [
     "create:messages",
